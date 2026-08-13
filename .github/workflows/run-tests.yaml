@@ -51,6 +51,9 @@ jobs:
       - name: Setup environment and Prisma
         run: yarn setup:envs && yarn prisma:setup
 
+      - name: Build embed widget
+        run: yarn build:embed
+
       - name: Run server tests
         run: yarn workspace anything-llm-server test
 
@@ -68,9 +71,6 @@ jobs:
 
       - name: Run CLI tests
         run: yarn test:cli
-
-      - name: Build embed widget
-        run: yarn build:embed
 
       - name: Build browser extension
         run: yarn build:extension

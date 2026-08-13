@@ -1,5 +1,5 @@
 const { Notification } = require("../../models/notification");
-const { UserWallet } = require("../../models/billing/UserWallet");
+const { UserWallet } = require("../../models/billing/userWallet");
 
 const BILLING_ENABLED = process.env.BILLING_ENABLED === "true";
 const BILLING_DISABLED_RESULT = {

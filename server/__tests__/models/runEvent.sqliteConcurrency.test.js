@@ -28,10 +28,13 @@ describe("RunEvent SQLite sequence allocation", () => {
   });
 
   it("allocates contiguous unique sequences from two independent clients", async () => {
-    const workspace = await first.workspaces.findFirst({
+    const workspace = await first.workspaces.create({
+      data: {
+        name: "RunEvent concurrency test",
+        slug: `run-event-race-${randomUUID()}`,
+      },
       select: { id: true },
     });
-    expect(workspace).not.toBeNull();
     const runId = randomUUID();
     await first.runs.create({
       data: {
