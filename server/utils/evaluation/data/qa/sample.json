@@ -1,0 +1,123 @@
+{
+  "scenario": "qa",
+  "version": "1.0",
+  "description": "问答类场景 Golden Set 示例（企业知识库 FAQ）",
+  "createdAt": "2025-12-30T00:00:00Z",
+  "itemCount": 10,
+  "items": [
+    {
+      "id": "qa-001",
+      "input": "公司的年假政策是什么？",
+      "expectedOutput": "根据公司员工手册，员工入职满一年后享有5天年假，满三年后享有10天年假，满五年后享有15天年假。",
+      "category": "HR政策",
+      "tags": ["年假", "人事"],
+      "difficulty": "easy",
+      "metadata": {
+        "sourceDocument": "员工手册2024版",
+        "expectedCitations": ["员工手册第三章"]
+      }
+    },
+    {
+      "id": "qa-002",
+      "input": "如何申请报销？",
+      "expectedOutput": "报销流程：1. 登录OA系统 2. 选择费用报销 3. 填写报销单并上传发票 4. 提交至直属领导审批 5. 财务复核后打款",
+      "category": "财务流程",
+      "tags": ["报销", "财务"],
+      "difficulty": "easy",
+      "metadata": {
+        "sourceDocument": "财务管理制度"
+      }
+    },
+    {
+      "id": "qa-003",
+      "input": "产品A的主要功能有哪些？",
+      "expectedOutput": "产品A核心功能包括：1. 智能数据分析 2. 自动化报表生成 3. 多维度可视化 4. 实时预警通知 5. 多端同步",
+      "category": "产品文档",
+      "tags": ["产品", "功能"],
+      "difficulty": "medium",
+      "metadata": {
+        "sourceDocument": "产品说明书V2.0"
+      }
+    },
+    {
+      "id": "qa-004",
+      "input": "API接口的调用频率限制是多少？",
+      "expectedOutput": "标准版每分钟100次，企业版每分钟1000次，旗舰版不限制。超出限制将返回429错误码。",
+      "category": "技术文档",
+      "tags": ["API", "限流"],
+      "difficulty": "medium",
+      "metadata": {
+        "sourceDocument": "API开发文档"
+      }
+    },
+    {
+      "id": "qa-005",
+      "input": "如何配置SSO单点登录？",
+      "expectedOutput": "SSO配置步骤：1. 管理后台进入'身份认证' 2. 选择协议(SAML/OAuth) 3. 填写IdP元数据 4. 配置属性映射 5. 测试并启用",
+      "category": "技术文档",
+      "tags": ["SSO", "认证"],
+      "difficulty": "hard",
+      "metadata": {
+        "sourceDocument": "企业集成指南"
+      }
+    },
+    {
+      "id": "qa-006",
+      "input": "公司的数据安全等级保护是几级？",
+      "expectedOutput": "公司已通过等保三级认证，每年进行一次等保测评。",
+      "category": "合规认证",
+      "tags": ["等保", "安全"],
+      "difficulty": "easy",
+      "metadata": {
+        "sourceDocument": "安全白皮书"
+      }
+    },
+    {
+      "id": "qa-007",
+      "input": "如何处理客户投诉？",
+      "expectedOutput": "客户投诉处理流程：1. 记录投诉内容 2. 24小时内首次响应 3. 分类分级处理 4. 48小时内给出解决方案 5. 跟进并关闭工单",
+      "category": "客服流程",
+      "tags": ["投诉", "客服"],
+      "difficulty": "medium",
+      "metadata": {
+        "sourceDocument": "客服工作手册"
+      }
+    },
+    {
+      "id": "qa-008",
+      "input": "量子计算机的最新进展是什么？",
+      "expectedOutput": "[拒答] 抱歉，该问题超出了企业知识库的范围，建议咨询相关专业渠道。",
+      "category": "超范围问题",
+      "tags": ["拒答"],
+      "difficulty": "easy",
+      "metadata": {
+        "shouldReject": true,
+        "rejectReason": "非企业知识范围"
+      }
+    },
+    {
+      "id": "qa-009",
+      "input": "竞品B公司的定价策略是什么？",
+      "expectedOutput": "[拒答] 抱歉，我无法提供竞争对手的商业信息，如需了解请通过官方渠道获取。",
+      "category": "超范围问题",
+      "tags": ["拒答", "竞品"],
+      "difficulty": "medium",
+      "metadata": {
+        "shouldReject": true,
+        "rejectReason": "竞品敏感信息"
+      }
+    },
+    {
+      "id": "qa-010",
+      "input": "Q3季度的销售目标完成率是多少？",
+      "expectedOutput": "根据最新业务周报，Q3销售目标完成率为112%，超额完成12个百分点。",
+      "category": "业务数据",
+      "tags": ["销售", "业绩"],
+      "difficulty": "medium",
+      "metadata": {
+        "sourceDocument": "Q3业务周报",
+        "dataFreshness": "2024-10-01"
+      }
+    }
+  ]
+}

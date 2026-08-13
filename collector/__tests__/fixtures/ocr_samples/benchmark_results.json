@@ -1,0 +1,409 @@
+{
+  "timestamp": "2025-12-09T14:07:44.741Z",
+  "summary": {
+    "totalSamples": 10,
+    "smartWins": 5
+  },
+  "results": [
+    {
+      "file": "01_invoice_chinese.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "1.81",
+        "text": "EEE] Cw .\nTh fi a: —- %, F A Z) % £54: 24112000000185235870\n1 : N ¥ *\nFG oh ¢ ey FE BH: 2024411 19H\nGi NS.\n} a\n2 fe: JHA NG ES TIER EFL JEEZ HEE of\nd ;\n# %—ia fz ARE HARA 5:52110000MJ0159301H # Shia ARB/MHARANF:440509198111072019 -\nAB 4 Ar HASH 5 ¥ fz # ¥ fh & HM RE/IRRE HOH\nPEE TN EE %5 1 15841. 58 15841. 58 1% 158. 42|\n5%\nrs it ¥15841. 58 ¥158. 42)\nHabit (X35) Qik FE (15) ¥16000. 00\n(RFF RIB LR: 11101080000; RHF KREBS HMI LHR: EH FBSG SRL X BSR; SREIESH:\n* JI TLE C15 BFR 7 AL RAGHEB, ZR EAHENF",
+        "confidence": 33,
+        "wordCount": 125,
+        "charCount": 543,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "1.89",
+        "text": "Of 5F HHO . .\nL 2, 35 Pa i*\nTh fi a yy #7, F KR Zz) K 5a: 24112000000185233870\nz HT a 2\nFE To 7 fey FE EM: 2021411 F19H\nret] TS\n¥ Af: AAA TERETO RE\n7 7\nfa iA RE i ARH %:52110000MJI0159301H fa s—iA EMRE HEARS: 440509198111072019\nmash HASH 5 $4 # oO fH OW E/E fo\nPB 22 FFE AR SbF 1 15811. 58 15811. 38 1% 158. 12)\nRI 5\nA it ¥15841. 58 ¥158. 42)\nBia (RE) RETIRE (15) ¥16000. 00\nRTT ASTRA HLA XA4S : 11101080000; ARTE RE SEBS HUA 44 FE RBS R JL gd TEE IX BLS Ja SERIE SAY:\n4 [311006211100013182; oo oo ) ",
+        "confidence": 30,
+        "wordCount": 144,
+        "charCount": 610,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "1.87",
+        "text": "Of 5F HHO . .\nL 2, 35 Pa i*\nTh fi a yy #7, F KR Zz) K 5a: 24112000000185233870\nz HT a 2\nFE To 7 fey FE EM: 2021411 F19H\nret] TS\n¥ Af: AAA TERETO RE\n7 7\nfa iA RE i ARH %:52110000MJI0159301H fa s—iA EMRE HEARS: 440509198111072019\nmash HASH 5 $4 # oO fH OW E/E fo\nPB 22 FFE AR SbF 1 15811. 58 15811. 38 1% 158. 12)\nRI 5\nA it ¥15841. 58 ¥158. 42)\nBia (RE) RETIRE (15) ¥16000. 00\nRTT ASTRA HLA XA4S : 11101080000; ARTE RE SEBS HUA 44 FE RBS R JL gd TEE IX BLS Ja SERIE SAY:\n4 [311006211100013182; oo oo ) ",
+        "confidence": 30,
+        "wordCount": 144,
+        "charCount": 610,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "document",
+          "qualityLevel": "medium",
+          "strategy": "Document/handwriting detected, full preprocessing"
+        }
+      }
+    },
+    {
+      "file": "02_contract_scan.jpg",
+      "noPreprocess": {
+        "success": true,
+        "duration": "7.61",
+        "text": "(A seERzz\nITA ARBERF AEE\nARG\n\nHJ5 (ATA): tii FREES\n\nHuhk- ACE TEA BH XO) E Ek Ea LE Rimi 36 5b 3 58k 4 E—It\nEH ZIRE ES\n\nBEREAN: REE\n\nKERN: BE\n\nERE FE: vangjia@see.org.cn\n\nLH (ZFEN): BINT R ICE MRL 5H FRA 1]\n\nHoh: FREE ARNT LL EF EAS BE 3 5 BRA FH GARE FE — 3 G-5#4% 10\nJZ 30 Ihe\n\nBEREAN: ME\n\ng—tt 45 HRB: 91350102MA31E5HCXX\n\nBREN: BES\n\nBREE: chen. jx.0754@foxmail . com\n\n%T-\n\nHT AERBRICCT HEAT LAF RE RSE, BUTFHKHE (PEARL\nAE RAIL) FAH RARE, #5 BPS EUR 4 J Dk an pi\n\nF—% EX\n\nAER PAH TAREE REA WT EX:\n\n",
+        "confidence": 26,
+        "wordCount": 386,
+        "charCount": 1814,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "7.57",
+        "text": "~ SEEE®Z\nTAA EER S A & EF\nGIES\n\nHOP (RFEN): Ei ZA REGS\n\nHud: ACHE BE XO) ER sk mR LE Bm Eg 36 She 3 58 4 2—b\nFZ REES\n\nEEREN REE\n\nREN: iE\n\nERE 2: vangjia@see.org.cn\n\nZIT (ZAEN): BINT RIEM ERA RATE\n\nidk: fEEA RMN TOL KE EAS 5% 3 5 BAK FROG IE 3 G-5## 10\nJZ 30 Ips\n\nEEREN HH\n\nGi —tL 45 FARHS: 91350102MA31E5HCXX\n\nBREN: HES\n\nBREE: chen. jx.0754@foxmail . com\n\nKT\n\nHHA BERCH ITEM T IAB GRAR RG, XOTFHKYE (PEAR\nTHE RIEHL) FAH RAVAEARL, $5 PSF BR BY JR UR san Hild\n\nB—% EX\n\nAA FE EARN FEE RAT EX\n\n1. “RG, BR",
+        "confidence": 26,
+        "wordCount": 385,
+        "charCount": 1804,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "8.09",
+        "text": "TAA E REF RR SF AZ SE\nGICECREE\n\nHEA): dete ZIRE\n\nHud: JETER FH XOR) Ek ER lL EB Bg 36 SB 3 S58 4 E—b\nRZ REES\n\nEEREN: REE\n\nREN: iE\n\nERE FE: vangjia@see.org.cn\n\nZIT (FEN): BINT R ICE MERA RAF\n\nHuh: REA EM TOLL XE FER NG BE 3 5 BAK FH OBAE fl HI G-5#14 10\nJZ 30 IA\n\nEENFEAN: ME\n\ngi—1t SEARS: 91350102MA31E5HCXX\n\nKEN: Beg\n\nBREE: chen. jx.0754@foxmail . com\n\nXT\n\nHEA BRRCH ITEM T WAR ERAE RG, XOFFHKYE (PEARL\nFE RIEHL) FAH RAVERYERL, 15% BE PSF BA) 0 JE UR Ban Hild\n\nB—% EX\n\nAA [FF FE ARE RA GR A Xe\n\n1. “",
+        "confidence": 27,
+        "wordCount": 395,
+        "charCount": 1845,
+        "preprocessed": true,
+        "binarized": false,
+        "analysis": {
+          "imageType": "mixed",
+          "qualityLevel": "medium",
+          "strategy": "Brightness issue detected, normalize only"
+        }
+      }
+    },
+    {
+      "file": "03_id_card.jpg",
+      "noPreprocess": {
+        "success": true,
+        "duration": "5.95",
+        "text": "pasts RET Nr Bi rr ey LE ET RR STE RT SR TE\nI TRC ge SRUCRNN IC PI | I |p Ra\nRB\" re, a a § CFR RAR ORRISEP TINY TY =r os =\n= RATE RCA FT DWE eLT 7 2 AB oes ea eRe\n= A SRE NM NC Aa Le Se a BIA ea\nCo NED Ta SF SRN a Yor, XN , W \\\\ dP A LISA STE + RB J JA ya\" Jae\nTaD CRIN EF SSS NSS roa Ss Ze same i\nNoo ® as | Ssh AL a oN \\ pare 2 Ler ate Ne KAA ST\n\nAN oD WL \\ AR wD CIAL EARLE aud goatee Et, rN A\n\nSO Ny 2 : Saas 1% Sian he \"4 X opr rs 54 A Ra A oi Fg 4 23\n\nRA Ni NE A \"AVE id = a NY Eta APRs N\\ x \\ ",
+        "confidence": 29,
+        "wordCount": 342,
+        "charCount": 1081,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "2.96",
+        "text": "wo . N toe X ’\ncanaiiiets I TE ON TPPOT: 2 Co ET WENT : . f\n” ei\n-— a alin i LL\n) - . : S ] 3 , ¥ a ad .\n. . . . N “ . ; E g * . : f cr\nK : - N JE ’ h H . ’\n. 7 i -\n* ¥ %Z :\n. .- = \" xX ;\n| RY TI\ndr me\nA tg o\n: . a 1 p- | 9 4\nA 4 Ld br\n~ OS. Ea ol )\nSINS xr Mi hi,\n1 ln ido\nby RA i.\ner He rere\nHER He\nRe We\nEe gs LT\n. WN, TE A UR\nEN opel\n} : Sado ng\nRENT Pn Rn\n] ) ro\n: y - ies pat Batts 1\nwR ARN\neh SEE dass? ES.\nna ER ARYL g\nREL ELL 4 YA fn IRA ETN eo\ntaka get [PRA bi. REO E BESS LIAL\n&. ng E43 PE",
+        "confidence": 21,
+        "wordCount": 208,
+        "charCount": 616,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "3.01",
+        "text": "wo . N toe X ’\ncanaiiiets I TE ON TPPOT: 2 Co ET WENT : . f\n” ei\n-— a alin i LL\n) - . : S ] 3 , ¥ a ad .\n. . . . N “ . ; E g * . : f cr\nK : - N JE ’ h H . ’\n. 7 i -\n* ¥ %Z :\n. .- = \" xX ;\n| RY TI\ndr me\nA tg o\n: . a 1 p- | 9 4\nA 4 Ld br\n~ OS. Ea ol )\nSINS xr Mi hi,\n1 ln ido\nby RA i.\ner He rere\nHER He\nRe We\nEe gs LT\n. WN, TE A UR\nEN opel\n} : Sado ng\nRENT Pn Rn\n] ) ro\n: y - ies pat Batts 1\nwR ARN\neh SEE dass? ES.\nna ER ARYL g\nREL ELL 4 YA fn IRA ETN eo\ntaka get [PRA bi. REO E BESS LIAL\n&. ng E43 PE",
+        "confidence": 21,
+        "wordCount": 208,
+        "charCount": 616,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "mixed",
+          "qualityLevel": "medium",
+          "strategy": "Default strategy applied"
+        }
+      }
+    },
+    {
+      "file": "04_screenshot_mixed.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "0.67",
+        "text": "Ca)\nGN. 96] «question —\nVAN 4 ht 120) =\nrevival Vector Embedding Model User\n/ = EEE 5:\n| N—}\nVector DB\nELIE \\\ner\nNN — [TT] ~~\ni= | pi A oR § J\nDocument prompt LLM\nTLARAO SRSA RAR 1 KEE\nby Dennis Yang\nCSDN @EIM THESE",
+        "confidence": 49,
+        "wordCount": 51,
+        "charCount": 215,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "0.68",
+        "text": "Ca) -—\naN... XB AF\nVAN 7) hts RIE\nrerieal Vector Embedding Model User\n/ BE EERE A\nSS\nVector DB\nFELIEE \\\nCome\n\\\\ — [TT] @\n= | HE & 7 § J\nDocument prompt LLM\nUT: Bh Tg EE IRE KiE=ER\nby Dennis Yang",
+        "confidence": 50,
+        "wordCount": 47,
+        "charCount": 194,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "0.77",
+        "text": "~N\nGN. 96] «question —\nJAN J i #2 =\nrevival Vector Embedding Model User\n/ HE FIER H\nSS\nVector DB\nMEIER \\\nRRR SE\n\\ fr [TT] -,\n= oe, [EB = ras,\n= =F —= Ly)\nDocument prompt LLM\nTURAL RF KiE=iaE\nby Dennis Yang\nCSDN @F HES:",
+        "confidence": 46,
+        "wordCount": 51,
+        "charCount": 218,
+        "preprocessed": true,
+        "binarized": false,
+        "analysis": {
+          "imageType": "screenshot",
+          "qualityLevel": "medium",
+          "strategy": "Screenshot detected, preprocess without binarization"
+        }
+      }
+    },
+    {
+      "file": "05_handwriting.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "0.84",
+        "text": "2 Png",
+        "confidence": 44,
+        "wordCount": 2,
+        "charCount": 5,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "20.77",
+        "text": "BEE CERI IR SERENE SN oh TE nd PT SOC a CL\nBEET SoA ST Ee ETE gl Ta Le ares 7\nRENE Sat a Ea oR gg Pops EE ae we vs i GA se ra 0 a WL Fa h i wet Rn ka\nhi oie A Tn Rn a 7} is A 0 i - oo 3 eT a SN | . |\nLn PURE Ld JERR iA TR Se ERENT : i : ’ ' ! Ey\nvs as gn Cha EG sa HL od AE el i i EAMES LL |\nean TUE te EE eed a ESR We eS Ee en a Ye “ SR Loon ERC |\nCre Despi sinle han i cal Es ne CS REA Tel . ts oe Cy CE ) | BN | |\n\nLET ihe oan CAB a Ea re a EN SU LN N EERE CTV | w B . s i . Pp\nEg a i He pO J dg e",
+        "confidence": 24,
+        "wordCount": 1805,
+        "charCount": 5149,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "20.84",
+        "text": "BEE CERI IR SERENE SN oh TE nd PT SOC a CL\nBEET SoA ST Ee ETE gl Ta Le ares 7\nRENE Sat a Ea oR gg Pops EE ae we vs i GA se ra 0 a WL Fa h i wet Rn ka\nhi oie A Tn Rn a 7} is A 0 i - oo 3 eT a SN | . |\nLn PURE Ld JERR iA TR Se ERENT : i : ’ ' ! Ey\nvs as gn Cha EG sa HL od AE el i i EAMES LL |\nean TUE te EE eed a ESR We eS Ee en a Ye “ SR Loon ERC |\nCre Despi sinle han i cal Es ne CS REA Tel . ts oe Cy CE ) | BN | |\n\nLET ihe oan CAB a Ea re a EN SU LN N EERE CTV | w B . s i . Pp\nEg a i He pO J dg e",
+        "confidence": 24,
+        "wordCount": 1805,
+        "charCount": 5149,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "document",
+          "qualityLevel": "low",
+          "strategy": "Document/handwriting detected, full preprocessing"
+        }
+      }
+    },
+    {
+      "file": "06_table_report.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "4.34",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\n= | == ==\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nR&D < 28s7%\nAl Journal Publications nas% | 37a6k 4313 2/36 86.56k 100 1/36 12.84k 14.61 arse 7k 2024 3/36\nAl Conference Publications 8.57% 3.51 24.36 3/36 18.37k 100 1/36 766 524 5/36 13.28k 92.357 2/36\nAl Journal Citations nas% | weok eam 2/36 | 278.92 100 1/36 cassk 2299 3/36 ",
+        "confidence": 77,
+        "wordCount": 875,
+        "charCount": 4599,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "4.69",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nRED < 2s\nAl Journal Publications nas% mask 43.13 2/36 86.56k 100 v6 12.80k 14.61 736 7k 20.26 3/36\nAl Conference Publications 8.57% 3.5% 24.36 3/36 14.37k 100 v6 766 5.26 5/36 13.28k 52.57 2/36\nAl Journal Citations 143% mow ean 2/36 28.92 100 v6 6assk 2299 3/36 51.85k 1.41 4/36\nAl Confere",
+        "confidence": 73,
+        "wordCount": 846,
+        "charCount": 4492,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "4.70",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nRED < 2s\nAl Journal Publications nas% mask 43.13 2/36 86.56k 100 v6 12.80k 14.61 736 7k 20.26 3/36\nAl Conference Publications 8.57% 3.5% 24.36 3/36 14.37k 100 v6 766 5.26 5/36 13.28k 52.57 2/36\nAl Journal Citations 143% mow ean 2/36 28.92 100 v6 6assk 2299 3/36 51.85k 1.41 4/36\nAl Confere",
+        "confidence": 73,
+        "wordCount": 846,
+        "charCount": 4492,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "document",
+          "qualityLevel": "medium",
+          "strategy": "Document/handwriting detected, full preprocessing"
+        }
+      }
+    },
+    {
+      "file": "07_low_contrast.jpg",
+      "noPreprocess": {
+        "success": true,
+        "duration": "0.79",
+        "text": ">\n| 2 TN\n+ =;\n» Em f\n>\nr- snk 9 > >A 9B\nI~ HE LL RES g\n= 3\n>\nas >\n[SA 5 53 x\nh. > #27\n$8 FNEAFE he\n—8& = 53 u r=\nBIR AEERME\nFok anene WE le\nEMER BEER a\nSER BHERE i =\nBAR HEERH\nBLE SHER\nFEFEFZIR E4FHE [= =\nG331+G219+G228 Ev i\nSAREE\n[13520085",
+        "confidence": 35,
+        "wordCount": 67,
+        "charCount": 240,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "0.78",
+        "text": "»-\n%- “\\> >\nport oF mpm fh\nxt = Pvoind\n| pr » >\nK >\noe rE\n> 9 Lit &\n»>\nve hs\n[ZEA > x bn\n\\ >» BZ :\nchpnnG, po HA\n$= mnzzns GO ie \\\nBME BUEG( SPs\nBai EA EE N\nHE REFS\nHE EHERY . y\nFEFEFZiR EEFHE =) [=]\n3314621946228 on 4\naun NENLLT\n[i Roe",
+        "confidence": 27,
+        "wordCount": 66,
+        "charCount": 236,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "0.84",
+        "text": ">\nBs i Ta, \\> >\nI & Zouba.Cawenz 3 pe\nTe ple of Q Po\nE ik Eons ri 25\nar a”, d\ne— B24 J\n> J \"9 ro\nE-B RIZAE LS af en\nsz ArEane Sg >\nBoB WHEEME amt |: oy PE {\nSME BEER WI ET ca\n$58 BHERE x. : —-\nREREYZIR ERT =] =\nG331+G219+G228 Th\niE wt",
+        "confidence": 29,
+        "wordCount": 65,
+        "charCount": 234,
+        "preprocessed": true,
+        "binarized": false,
+        "analysis": {
+          "imageType": "mixed",
+          "qualityLevel": "low",
+          "strategy": "Brightness issue detected, normalize only"
+        }
+      }
+    },
+    {
+      "file": "08_watermarked.jpg",
+      "noPreprocess": {
+        "success": true,
+        "duration": "0.84",
+        "text": "| HEAZ SAH\nA, =F +-f [\n| + Biggie (OF\nans SHE) EAR\nMthmARsKRR EH, W\n| Saf. BE CREARERESG\n[ | mone BF =e at\nWT Ei 5h. |\n| /] 7 lL fi PAMNERALERRE lo dod\nFUNEERZER (odo",
+        "confidence": 30,
+        "wordCount": 41,
+        "charCount": 166,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "0.89",
+        "text": "h MARZ Sham A\n! rs —_ Al + —\ne Fx. A Ink oh \\7\ni gpa. HE. BH ims mim\n: = wuss Ef (54) ERE\nI RIFOMARESHAEXER, H\ni gobi. BE (MEARKHES\n| ) BM) MRE BF 2% Ht\nRET A\n4 : io ° IE ,\nt Ea iL TAMERARERRE (5 rt\n4] raResRees [oO of\n200% gx pt\ni iE#se BO00132007002626",
+        "confidence": 27,
+        "wordCount": 66,
+        "charCount": 254,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "1.06",
+        "text": "} #AEAZ SAAB ==)\nJi = gas, hs re a\n| pay. £ HE BA Leeann\n| po) ans FH(EL) BET\n| C WIFGMAESAARKENR, K\ni Galt. Bik (MEARE\n| EE BN) MAE BF = Ht\nIi iw TEA oh BK 59) 2 2) 7\ni DEY\ni suRezAzes / [ -\nI a\ni {E4342 8000132007002626",
+        "confidence": 28,
+        "wordCount": 57,
+        "charCount": 221,
+        "preprocessed": true,
+        "binarized": false,
+        "analysis": {
+          "imageType": "screenshot",
+          "qualityLevel": "medium",
+          "strategy": "Screenshot detected, preprocess without binarization"
+        }
+      }
+    },
+    {
+      "file": "09_skewed.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "4.50",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\n= | == ==\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nR&D < 28s7%\nAl Journal Publications nas% | 37a6k 4313 2/36 86.56k 100 1/36 12.84k 14.61 arse 7k 2024 3/36\nAl Conference Publications 8.57% 3.51 24.36 3/36 18.37k 100 1/36 766 524 5/36 13.28k 92.357 2/36\nAl Journal Citations nas% | weok eam 2/36 | 278.92 100 1/36 cassk 2299 3/36 ",
+        "confidence": 77,
+        "wordCount": 875,
+        "charCount": 4599,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "4.70",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nRED < 2s\nAl Journal Publications nas% mask 43.13 2/36 86.56k 100 v6 12.80k 14.61 736 7k 20.26 3/36\nAl Conference Publications 8.57% 3.5% 24.36 3/36 14.37k 100 v6 766 5.26 5/36 13.28k 52.57 2/36\nAl Journal Citations 143% mow ean 2/36 28.92 100 v6 6assk 2299 3/36 51.85k 1.41 4/36\nAl Confere",
+        "confidence": 73,
+        "wordCount": 846,
+        "charCount": 4492,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "4.80",
+        "text": "2023 Global Al Vibrancy Ranking\nWeighted Index Score | Source: 2024 Al Index\nUnited States China United Kingdom India\n\nAbsolute Values Weight\" Value Score Rank Value Score Rank Value Score Rank Value Score Rank\nRED < 2s\nAl Journal Publications nas% mask 43.13 2/36 86.56k 100 v6 12.80k 14.61 736 7k 20.26 3/36\nAl Conference Publications 8.57% 3.5% 24.36 3/36 14.37k 100 v6 766 5.26 5/36 13.28k 52.57 2/36\nAl Journal Citations 143% mow ean 2/36 28.92 100 v6 6assk 2299 3/36 51.85k 1.41 4/36\nAl Confere",
+        "confidence": 73,
+        "wordCount": 846,
+        "charCount": 4492,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "document",
+          "qualityLevel": "medium",
+          "strategy": "Document/handwriting detected, full preprocessing"
+        }
+      }
+    },
+    {
+      "file": "10_low_resolution.png",
+      "noPreprocess": {
+        "success": true,
+        "duration": "1.44",
+        "text": ")\nBO WERE - MERA LTH = RE\n.\nwisi\nws —, ene ) 4\nETRE © HABER, Ki\n) RIE —— Tig | pl dE prnrTiy\nmits —— 7 ie CUR\n. mtn\n& HIRT —— im FR ir\nS )\n\n2 & wwe —— mre SMB HER{Repo(o/n) Hin Lr A\n” & VES —— SEE Repoto/m) HE SMI ami Repocor) Ri is\n1H\nfii y, 24s\n\nWh R — SLES] Repo(o/n) Bo CNAV| i 3\n\n=\n: / cpoiorm ihn\nRE —/ vidas uk pra pi tivey\ny Bm i\nREI —— Fl Jil sma ms AR ARR\nGbs rl Cbs\n1 — INN\n[ET\nYo WEt — Susi: = YEA EIR",
+        "confidence": 32,
+        "wordCount": 114,
+        "charCount": 413,
+        "preprocessed": false,
+        "binarized": true,
+        "analysis": null
+      },
+      "forcePreprocess": {
+        "success": true,
+        "duration": "1.43",
+        "text": "VI WERRINAC - HERA LTH — Hk\n© ns fo\nde we mii HRRERIAT, VOT KBE\nJT SE TC 2\nSS ig Ma Tithe\nSS [1\nCSF ER —— wie Binnie\nRex\nRCA — x HE\n\n[A 7 &\nnt SS wei rs —— Boon nmin mepotom) HH HER fl\nr~ eye a\n& & om wm #\nbed 4 $Y LE BEA] Repofo/m) \" SML HALL Repoto/n) eta 1\noY I\" Iv\n> © Si wom ik\n4 TER —— LEBEN] Repoto/m) 14 SMI NAY PERE An ay i\n\nES\n\nkik i. epolicrm A URL\nki —— etn sM2 Repofterny hits\n~ 1x RE 5\n— Ry il sas Ine ME fiir iveed)\nLARS Juba\nfo fds\nsewfongemeewE",
+        "confidence": 26,
+        "wordCount": 119,
+        "charCount": 461,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": null
+      },
+      "smartPreprocess": {
+        "success": true,
+        "duration": "1.47",
+        "text": "VI WERRINAC - HERA LTH — Hk\n© ns fo\nde we mii HRRERIAT, VOT KBE\nJT SE TC 2\nSS ig Ma Tithe\nSS [1\nCSF ER —— wie Binnie\nRex\nRCA — x HE\n\n[A 7 &\nnt SS wei rs —— Boon nmin mepotom) HH HER fl\nr~ eye a\n& & om wm #\nbed 4 $Y LE BEA] Repofo/m) \" SML HALL Repoto/n) eta 1\noY I\" Iv\n> © Si wom ik\n4 TER —— LEBEN] Repoto/m) 14 SMI NAY PERE An ay i\n\nES\n\nkik i. epolicrm A URL\nki —— etn sM2 Repofterny hits\n~ 1x RE 5\n— Ry il sas Ine ME fiir iveed)\nLARS Juba\nfo fds\nsewfongemeewE",
+        "confidence": 26,
+        "wordCount": 119,
+        "charCount": 461,
+        "preprocessed": true,
+        "binarized": true,
+        "analysis": {
+          "imageType": "document",
+          "qualityLevel": "low",
+          "strategy": "Document/handwriting detected, full preprocessing"
+        }
+      }
+    }
+  ]
+}

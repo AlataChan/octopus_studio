@@ -1,0 +1,65 @@
+# Production-acceptable TODOs
+#
+# Format: <relative-path> :: <sha256(normalized full TODO line)> :: <reason> | <owner>
+# Normalization: trim the matched TODO line and collapse internal whitespace to one space.
+# Comments show the last-known line and TODO text for review only; matching ignores line numbers.
+# To add an accepted production TODO, run `node scripts/check-todo-allowlist.js`;
+# the violation output prints a ready-to-paste comment and allowlist entry.
+# last seen: server/endpoints/system.js:1062 | // TODO: This endpoint is replicated in the admin endpoints file.
+server/endpoints/system.js :: 87d1b1293c7a5e943d9efa3cb384a518521cc962a64b1bdb3fcfc3d18cd83e5a :: legacy duplicate admin endpoint cleanup follow-up | @alata-team
+# last seen: server/endpoints/api/openai/index.js:231 | // TODO: "inputs" key support will eventually be fully removed.
+server/endpoints/api/openai/index.js :: 73b20a49d904cf214f08c60dce8110b525f37fd5d1329f2c397fbfcc88b20318 :: OpenAI inputs compatibility deprecation follow-up | @alata-team
+# last seen: server/endpoints/admin.js:418 | // TODO: Delete this endpoint
+server/endpoints/admin.js :: a505c4405c4c6215f52e6e559243f393846d3807e7f903f1d53a12e553af6d51 :: legacy admin endpoint removal follow-up | @alata-team
+# last seen: server/endpoints/agentFlows.js:144 | //       // TODO: Implement flow execution
+server/endpoints/agentFlows.js :: 05946fcff4e0872ff87ef75020c386b4b8ffd47bb246c6bd2dee5c2a631047d7 :: agent flow execution intentionally hidden until implementation | @alata-team
+# last seen: server/utils/memory/workingMemory.js:333 | /TODO[:\s]*(.{5,50})/gi,
+server/utils/memory/workingMemory.js :: e44ba88562b7a7b8cbb0a116729dccc730949b92a13a4ad191ea5bd484e4daa2 :: intentional regex pattern for TODO memory extraction | @alata-team
+# last seen: server/utils/agents/aibitat/index.js:903 | // TODO: should it throw an error or keep the chat alive when there is no node to chat with in the group?
+server/utils/agents/aibitat/index.js :: d75be227cf8ae5c7966895be8d3052030ac9d92f3d6db63870ff481c04c64c76 :: agent group empty-node behavior decision follow-up | @alata-team
+# last seen: server/utils/agents/aibitat/index.js:994 | // TODO: move this to when the group is created
+server/utils/agents/aibitat/index.js :: ff0bc6e43f294e69d4ec25eff0e38760ef0951e46412b7a9fa52628e7fbec107 :: agent group creation lifecycle cleanup follow-up | @alata-team
+# last seen: server/utils/agents/aibitat/index.js:1016 | // TODO: what should it do when there is no node to chat with?
+server/utils/agents/aibitat/index.js :: 8a33586b1a4b3b65e84393028ab66e53facea9a5b360eea7973afe90902b9809 :: agent group no-node behavior decision follow-up | @alata-team
+# last seen: server/utils/agents/index.js:1041 | // TODO: 如果 LLM 支持多模态，可以在这里处理图片
+server/utils/agents/index.js :: 7f0477fb71cf684f589a994f2b49201045da0ab579705cfe2a36dde9e9cf9a9c :: future multimodal image handling support | @alata-team
+# last seen: server/utils/agents/diagnostics/ruleEngine.js:299 | // TODO: 如果有 assistantId，可以从数据库加载自定义规则
+server/utils/agents/diagnostics/ruleEngine.js :: 72c7535c0a27876644f7bad9524d94c494a49abe6840168f6b36158c6ced3714 :: future assistant-specific diagnostics rules | @alata-team
+# last seen: server/utils/AiProviders/genericOpenAi/index.js:217 | // TODO: This is a copy of the generic handleStream function in responses.js
+server/utils/AiProviders/genericOpenAi/index.js :: 0b68a00a34626b26598c3bb747dba59150d86f4a7379bcf4315abfd76d792805 :: stream handler deduplication refactor follow-up | @alata-team
+# last seen: server/utils/AiProviders/deepseek/index.js:179 | // TODO: This is a copy of the generic handleStream function in responses.js
+server/utils/AiProviders/deepseek/index.js :: 0b68a00a34626b26598c3bb747dba59150d86f4a7379bcf4315abfd76d792805 :: stream handler deduplication refactor follow-up | @alata-team
+# last seen: server/utils/AiProviders/ollama/index.js:272 | ? {} // TODO: if in base mode, maybe we just use half the context window when below <10K?
+server/utils/AiProviders/ollama/index.js :: 1ec362b7c1126bbe4cb02bea25e420e10644cbbe75325990f642e7be2ea97372 :: context-window base mode tuning follow-up | @alata-team
+# last seen: server/utils/TextSplitter/index.js:157 | // if (!config?.splitByFilename) {// TODO do something when specific extension is present? }
+server/utils/TextSplitter/index.js :: 13fdf0e9327f88aa1044a263b0747a1f8d3984408ccc3b81173b9bdf79b52bc0 :: file-extension-aware splitting follow-up | @alata-team
+# last seen: server/utils/files/index.js:437 | * @TODO - When lazy loading for folders is implemented, we should increase this threshold (512MB)
+server/utils/files/index.js :: 3f23b77cb512039e38692a6f8c1052c46b2726f7df97fa45fd5691c175c3750e :: folder lazy loading threshold follow-up | @alata-team
+# last seen: server/utils/chats/stream.js:592 | // TODO: 在 Agent Flow 集成时，从 flow 执行结果中提取 metadata
+server/utils/chats/stream.js :: e2e7e8fb214c416e239cbceab63ae49e8fe25e5af569beda268507b824503b14 :: agent flow metadata extraction when execution is enabled | @alata-team
+# last seen: server/utils/helpers/chat/responses.js:24 | // 1. This parameter is not available in our current API version (TODO: update)
+server/utils/helpers/chat/responses.js :: 8d1c8aea67ad7e60360c98a72aff52d865be40306e8be873dc2b706196f61f87 :: OpenAI API version upgrade follow-up | @alata-team
+# last seen: server/utils/billing/alertService.js:140 | // TODO(PR-014): future work, gated by BILLING_ENABLED.
+server/utils/billing/alertService.js :: 7cb09a7943fda444d3f2b8daeee968eb4a26ef8575cec615035757aec28b9587 :: PR-014 billing future work gated by BILLING_ENABLED | @alata-team
+# last seen: server/models/workspaceChats.js:495 | // TODO: Replace with createMany when we update prisma to latest version
+server/models/workspaceChats.js :: 84a61f0fdfacd6088a7229ebf19340c1b02784218bca35ccbafc9935397f1de3 :: Prisma createMany upgrade follow-up | @alata-team
+# last seen: frontend/src/utils/paths.js:294 | // TODO: Point these to dedicated Octopus Studio docs when they are published.
+frontend/src/utils/paths.js :: f62f71693bd794c4d760c79a378a0be26555f827b4e06fe42ab56981e8489d9d :: dedicated Octopus Studio docs URL follow-up | @octopus-studio
+# last seen: frontend/src/models/admin.js:159 | // TODO: remove this in favor of systemPreferencesByFields
+frontend/src/models/admin.js :: 2eb1e40508756dcde6eed3ac636caebb89eb91afa47b19a629ac26e33713d92a :: admin preferences API consolidation follow-up | @alata-team
+# last seen: frontend/src/components/contexts/TTSProvider.jsx:11 | * TODO: This context provider simply wraps around the System.keys() call to get the TTS provider settings.
+frontend/src/components/contexts/TTSProvider.jsx :: eba48f33043f1cbcb21823a5c1adf6aa85e2f65bb37982b746d85051333f87da :: TTS provider context simplification follow-up | @alata-team
+# last seen: frontend/src/components/AssistantSelector/index.jsx:272 | // TODO: 更多操作菜单
+frontend/src/components/AssistantSelector/index.jsx :: 204d0422c29fe53504d450462fe062d6d50ec92dd624185ea50fc308c7b29e30 :: assistant selector more-actions menu follow-up | @alata-team
+# last seen: frontend/src/components/WorkspaceChat/ChatContainer/index.jsx:507 | // TODO: Simplify this WSS stuff
+frontend/src/components/WorkspaceChat/ChatContainer/index.jsx :: a6457517237413069f4f01d87a3ec2a8c21b826d27a1b59b4e20418eefd39e99 :: workspace websocket simplification follow-up | @alata-team
+# last seen: frontend/src/pages/AssistantLibrary/CreateAssistant/StepSelectSource.jsx:143 | // TODO: 检查是否已上传文件
+frontend/src/pages/AssistantLibrary/CreateAssistant/StepSelectSource.jsx :: 8bf4a7345c3a7364b17b3d19a78e85cb0c937fcf4d5891b1ef5f7448a351f1d3 :: file upload existence check follow-up | @alata-team
+# last seen: frontend/src/pages/WorkspaceSettings/ChatSettings/WorkspaceLLMSelection/index.jsx:174 | // TODO: Add this to agent selector as well as make generic component.
+frontend/src/pages/WorkspaceSettings/ChatSettings/WorkspaceLLMSelection/index.jsx :: 61bf9cd17baebdec3fd1198458f80dd10ce2bea0c7f6d273d549ce66bd3de6ab :: generic agent selector component follow-up | @alata-team
+# last seen: frontend/src/pages/WorkspaceSettings/ChatSettings/ChatPromptSettings/index.jsx:12 | // TODO: Move to backend and have user-language sensitive default prompt
+frontend/src/pages/WorkspaceSettings/ChatSettings/ChatPromptSettings/index.jsx :: 7e3a626238565a1a429f09ee3411fae19377a18280e60657989393b31d2f1e3f :: backend localized default prompt follow-up | @alata-team
+# last seen: frontend/src/pages/WorkspaceSettings/AgentConfig/AgentLLMSelection/index.jsx:38 | // TODO: More agent support.
+frontend/src/pages/WorkspaceSettings/AgentConfig/AgentLLMSelection/index.jsx :: 87af97b828df0ccdfc4d8f6a549652ab68aab8195f91ae5c6a1240145dda670f :: additional agent provider support follow-up | @alata-team
+# last seen: frontend/src/pages/WorkspaceSettings/Episodes/EpisodeDetailModal.jsx:43 | // TODO: 后续可以添加 API 来获取详细的关联列表
+frontend/src/pages/WorkspaceSettings/Episodes/EpisodeDetailModal.jsx :: a77ef6d28f34fda72e27b0c7d9beda6cd7eee11ab3c48d4106e520d1c2f595d1 :: episode detail relation API follow-up | @alata-team

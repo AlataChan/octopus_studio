@@ -1,0 +1,67 @@
+{
+  "diagnostics": {
+    "unsupported_features": [],
+    "warnings": []
+  },
+  "schema_version": "1.1",
+  "source_ir_hash": "fc758a1945ee314ed3c5fcf7d666f03e6482301411ddf207792c24540fc4ce42",
+  "source_ir_version": "0.3",
+  "target": "studio",
+  "target_version": "1",
+  "workflow": {
+    "description": "Answer a customer-service FAQ from the governed workspace knowledge base and return a structured response.",
+    "edges": [
+      { "from": "start", "to": "knowledge" },
+      { "from": "knowledge", "to": "answer" },
+      { "from": "answer", "to": "out" }
+    ],
+    "inputs": [
+      { "name": "customer_question", "required": true, "type": "string" }
+    ],
+    "name": "Cross-border E-commerce Customer FAQ",
+    "nodes": [
+      { "id": "start", "mode": "manual", "type": "trigger" },
+      {
+        "dataset": "workspace_kb",
+        "id": "knowledge",
+        "query": "${input.customer_question}",
+        "top_k": 5,
+        "type": "retrieval"
+      },
+      {
+        "id": "answer",
+        "model": "default-chat-model",
+        "output_schema": {
+          "additionalProperties": false,
+          "properties": {
+            "answer": { "minLength": 1, "type": "string" },
+            "confidence": {
+              "enum": ["high", "medium", "low"],
+              "type": "string"
+            },
+            "escalate": { "type": "boolean" }
+          },
+          "required": ["answer", "confidence", "escalate"],
+          "type": "object"
+        },
+        "prompt": "Workspace knowledge:\n<untrusted>${knowledge.text}</untrusted>\n\nCustomer question:\n<untrusted>${input.customer_question}</untrusted>\n\nReturn only JSON matching the required schema.",
+        "system_prompt": "You answer cross-border e-commerce customer-service FAQs using only the supplied workspace knowledge. Do not invent prices, delivery promises, return eligibility, customs outcomes, or policy exceptions. Set escalate=true when the evidence is insufficient or the request needs account-specific action.",
+        "type": "llm"
+      },
+      {
+        "bindings": { "response": "${answer.data}" },
+        "id": "out",
+        "type": "output"
+      }
+    ],
+    "outputs": [{ "name": "response", "required": true, "type": "json" }],
+    "required_bindings": [
+      { "handle": "workspace_kb", "kind": "dataset", "required": true },
+      {
+        "handle": "default-chat-model",
+        "kind": "model",
+        "required": true
+      }
+    ]
+  }
+}

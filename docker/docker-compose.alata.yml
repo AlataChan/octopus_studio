@@ -1,0 +1,190 @@
+# Alata Studio 完整部署配置
+# 包含 MinIO（临时分析层）和 PostgreSQL（业务数据层）
+#
+# 注意：
+# - `docker/docker-entrypoint.sh` 会根据 `DATABASE_URL` 自动切换 Prisma schema：
+#   `postgresql://...` 使用 `server/prisma/postgres/schema.prisma`，
+#   其他情况使用 SQLite schema。
+# - 推荐先复制 `docker/.env.alata.example` 为 `docker/.env`，再填入真实的 JWT / AUTH_TOKEN / LLM API Key。
+# - 本编排默认包含完整项目能力：主服务、PostgreSQL、MinIO、IM Gateway、agency-agents 初始化导入。
+#
+# 运行提示：
+# - 本文件不包含 Ollama，请使用云端 API Key（OpenAI/DeepSeek 等）方式配置 LLM。
+# - 请不要与 `docker/docker-compose.ollama.yml` 同时运行（端口/容器名可能冲突）。
+#
+# 使用方式:
+#   docker compose -f docker-compose.alata.yml up -d --build
+#
+# 服务访问:
+#   - Alata Studio: http://localhost:3001
+#   - MinIO 控制台: http://localhost:9001 (admin/minioadmin123)
+#   - PostgreSQL: localhost:5432 (postgres/postgres)
+
+name: alata-studio
+
+networks:
+  alata-network:
+    driver: bridge
+
+volumes:
+  minio_data:
+  postgres_data:
+  alata_storage:
+  im_gateway_data:
+
+services:
+  # ============================================
+  # MinIO 对象存储（临时分析层）
+  # ============================================
+  minio:
+    image: minio/minio:latest
+    container_name: alata-minio
+    ports:
+      - "9000:9000"   # S3 API
+      - "9001:9001"   # Web 控制台
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    networks:
+      - alata-network
+    restart: unless-stopped
+
+  # MinIO 初始化（创建默认 bucket）
+  minio-init:
+    image: minio/mc:latest
+    container_name: alata-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:9000 admin minioadmin123;
+      mc mb myminio/alata-analysis --ignore-existing;
+      mc ilm rule add myminio/alata-analysis --expire-days 30;
+      echo 'MinIO bucket created with 30-day lifecycle policy';
+      "
+    networks:
+      - alata-network
+
+  # ============================================
+  # PostgreSQL 数据库（业务数据层）
+  # ============================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: alata-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: alata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - alata-network
+    restart: unless-stopped
+
+  # ============================================
+  # Alata Studio 主服务
+  # ============================================
+  alata-server:
+    container_name: alata-server
+    build:
+      context: ../.
+      dockerfile: ./docker/Dockerfile
+      args:
+        ARG_UID: ${UID:-1000}
+        ARG_GID: ${GID:-1000}
+    cap_add:
+      - SYS_ADMIN
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    environment:
+      # 业务数据层
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/alata
+
+      # 临时分析层（MinIO）
+      ENABLE_TEMP_ANALYSIS: "true"
+      STORAGE_BACKEND: "s3"
+      S3_ENDPOINT: http://minio:9000
+      S3_ACCESS_KEY: admin
+      S3_SECRET_KEY: minioadmin123
+      S3_BUCKET: alata-analysis
+      S3_REGION: us-east-1
+
+      # 知识层
+      VECTOR_DB: lancedb
+
+      # 定时任务
+      ENABLE_CRON: "true"
+      KNOWLEDGE_SYNC_SCHEDULE: "0 2 * * *"
+
+      # 其他
+      ALATA_DOCKER_BOOTSTRAP_COMPLETE: "true"
+      ALATA_GATEWAY_API_KEY: ${ALATA_GATEWAY_API_KEY}
+      NODE_ENV: production
+      SERVER_PORT: 3001
+    volumes:
+      - "./.env:/app/server/.env"
+      - alata_storage:/app/server/storage
+      - "../collector/hotdir/:/app/collector/hotdir"
+      - "../collector/outputs/:/app/collector/outputs"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    networks:
+      - alata-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  # ============================================
+  # IM Gateway runtime bridge
+  # ============================================
+  im-gateway:
+    container_name: alata-im-gateway
+    build:
+      context: ../alata-im-gateway
+      dockerfile: ./Dockerfile
+    ports:
+      - "3100:3100"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      GATEWAY_PORT: 3100
+      GATEWAY_DATA_DIR: /app/data
+      GATEWAY_CONFIG_MODE: ${GATEWAY_CONFIG_MODE:-standalone}
+      ALATA_BASE_URL: http://alata-server:3001/api
+      ALATA_API_KEY: ${ALATA_GATEWAY_API_KEY}
+      ALATA_INTERNAL_SECRET: ${INTERNAL_API_SECRET}
+    volumes:
+      - im_gateway_data:/app/data
+    depends_on:
+      alata-server:
+        condition: service_healthy
+    networks:
+      - alata-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped

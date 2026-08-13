@@ -1,0 +1,494 @@
+from pathlib import Path
+
+from octopus_kb_compound.lint import lint_pages
+from octopus_kb_compound.models import PageRecord
+from octopus_kb_compound.vault import scan_markdown_files
+
+
+def test_lint_detects_broken_links():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/Agent设计模式.md",
+            title="Agent设计模式",
+            body="See [[Missing Page]].",
+            frontmatter={
+                "title": "Agent设计模式",
+                "type": "concept",
+                "lang": "zh",
+                "role": "concept",
+                "layer": "wiki",
+                "tags": ["AI/Agent"],
+                "summary": "Agent design patterns.",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "BROKEN_LINK" for f in findings)
+
+
+def test_lint_detects_orphan_pages():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/Agent设计模式.md",
+            title="Agent设计模式",
+            body="",
+            frontmatter={
+                "title": "Agent设计模式",
+                "type": "concept",
+                "lang": "zh",
+                "role": "concept",
+                "layer": "wiki",
+                "tags": ["AI/Agent"],
+                "summary": "Agent design patterns.",
+            },
+        ),
+        PageRecord(
+            path="wiki/INDEX.md",
+            title="INDEX",
+            body="",
+            frontmatter={
+                "title": "INDEX",
+                "type": "meta",
+                "lang": "en",
+                "role": "index",
+                "layer": "wiki",
+                "tags": ["AI/Wiki"],
+                "summary": "Entry point.",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "ORPHAN_PAGE" and f.path.endswith("Agent设计模式.md") for f in findings)
+
+
+def test_lint_detects_missing_summary_and_role():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/RAG与知识增强.md",
+            title="RAG与知识增强",
+            body="",
+            frontmatter={"layer": "wiki", "tags": ["AI/LLM/RAG"]},
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "MISSING_ROLE" for f in findings)
+    assert any(f.code == "MISSING_SUMMARY" for f in findings)
+    assert any(f.code == "SCHEMA_MISSING_FIELD" and f.message.startswith("role:") for f in findings)
+    assert any(
+        f.code in {"SCHEMA_MISSING_FIELD", "SCHEMA_INVALID_CONDITIONAL"}
+        and f.message.startswith("summary:")
+        for f in findings
+    )
+
+
+def test_lint_emits_schema_findings_for_invalid_role_value():
+    page = PageRecord(
+        path="wiki/x.md",
+        title="x",
+        frontmatter={
+            "title": "x",
+            "type": "concept",
+            "lang": "en",
+            "role": "not-a-real-role",
+            "layer": "wiki",
+            "summary": "s",
+        },
+        body="",
+    )
+    findings = lint_pages([page])
+    codes = {f.code for f in findings}
+    assert "SCHEMA_INVALID_FIELD" in codes
+
+
+def test_lint_still_emits_existing_codes_unchanged():
+    a = PageRecord(
+        path="wiki/a.md",
+        title="Shared",
+        frontmatter={
+            "title": "Shared",
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "s",
+            "source_of_truth": "canonical",
+        },
+        body="",
+    )
+    b = PageRecord(
+        path="wiki/b.md",
+        title="Shared",
+        frontmatter={
+            "title": "Shared",
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "s",
+            "source_of_truth": "canonical",
+        },
+        body="",
+    )
+    findings = lint_pages([a, b])
+    assert any(f.code == "DUPLICATE_CANONICAL_PAGE" for f in findings)
+
+
+def test_lint_resolves_alias_links_without_false_broken_or_orphan():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/RAG and Knowledge Augmentation.md",
+            title="RAG and Knowledge Augmentation",
+            body="",
+            frontmatter={
+                "title": "RAG and Knowledge Augmentation",
+                "type": "concept",
+                "lang": "en",
+                "role": "concept",
+                "layer": "wiki",
+                "summary": "RAG overview.",
+                "aliases": ["RAG"],
+            },
+        ),
+        PageRecord(
+            path="wiki/INDEX.md",
+            title="INDEX",
+            body="See [[RAG]].",
+            frontmatter={
+                "title": "INDEX",
+                "type": "meta",
+                "lang": "en",
+                "role": "index",
+                "layer": "wiki",
+                "summary": "Entry point.",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert findings == []
+
+
+def test_lint_reports_alias_collisions():
+    pages = [
+        PageRecord(
+            path="wiki/entities/PageA.md",
+            title="Page A",
+            body="",
+            frontmatter={
+                "title": "Page A",
+                "type": "entity",
+                "lang": "en",
+                "role": "entity",
+                "layer": "wiki",
+                "summary": "A",
+                "aliases": ["Shared Alias"],
+            },
+        ),
+        PageRecord(
+            path="wiki/entities/PageB.md",
+            title="Page B",
+            body="",
+            frontmatter={
+                "title": "Page B",
+                "type": "entity",
+                "lang": "en",
+                "role": "entity",
+                "layer": "wiki",
+                "summary": "B",
+                "aliases": ["Shared Alias"],
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "ALIAS_COLLISION" for f in findings)
+
+
+def test_lint_reports_duplicate_canonical_pages():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/RAG.md",
+            title="RAG",
+            body="",
+            frontmatter={
+                "title": "RAG",
+                "type": "concept",
+                "lang": "en",
+                "role": "concept",
+                "layer": "wiki",
+                "summary": "RAG overview.",
+                "canonical_name": "Retrieval Augmented Generation",
+            },
+        ),
+        PageRecord(
+            path="wiki/concepts/Retrieval Augmented Generation.md",
+            title="Retrieval Augmented Generation",
+            body="",
+            frontmatter={
+                "title": "Retrieval Augmented Generation",
+                "type": "concept",
+                "lang": "en",
+                "role": "concept",
+                "layer": "wiki",
+                "summary": "Duplicate overview.",
+                "source_of_truth": "canonical",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "DUPLICATE_CANONICAL_PAGE" for f in findings)
+
+
+def test_lint_reports_unresolved_frontmatter_alias():
+    pages = [
+        PageRecord(
+            path="wiki/entities/Vector Store.md",
+            title="Vector Store",
+            body="",
+            frontmatter={
+                "title": "Vector Store",
+                "type": "entity",
+                "lang": "en",
+                "role": "entity",
+                "layer": "wiki",
+                "summary": "Vector store.",
+                "aliases": ["!!!"],
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "UNRESOLVED_ALIAS" for f in findings)
+
+
+def test_lint_reports_canonical_alias_collision():
+    pages = [
+        PageRecord(
+            path="wiki/entities/Vector Store.md",
+            title="Vector Store",
+            body="",
+            frontmatter={
+                "title": "Vector Store",
+                "type": "entity",
+                "lang": "en",
+                "role": "entity",
+                "layer": "wiki",
+                "summary": "Vector store.",
+                "canonical_name": "Vector Store",
+                "aliases": ["Chunking"],
+            },
+        ),
+        PageRecord(
+            path="wiki/entities/Chunking.md",
+            title="Chunking",
+            body="[[Vector Store]]",
+            frontmatter={
+                "title": "Chunking",
+                "type": "entity",
+                "lang": "en",
+                "role": "entity",
+                "layer": "wiki",
+                "summary": "Chunking.",
+                "canonical_name": "Chunking",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert any(f.code == "CANONICAL_ALIAS_COLLISION" for f in findings)
+
+
+def test_canonical_key_ignores_raw_source_with_canonical_name_only():
+    raw_page = PageRecord(
+        path="raw/example.md",
+        title="Example",
+        frontmatter={
+            "title": "Example",
+            "type": "raw_source",
+            "lang": "en",
+            "role": "raw_source",
+            "layer": "source",
+            "canonical_name": "Example",
+        },
+        body="",
+    )
+    wiki_page = PageRecord(
+        path="wiki/concepts/example.md",
+        title="Example",
+        frontmatter={
+            "title": "Example",
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "Example concept.",
+            "source_of_truth": "canonical",
+        },
+        body="",
+    )
+    findings = lint_pages([raw_page, wiki_page])
+    assert not any(f.code == "DUPLICATE_CANONICAL_PAGE" for f in findings)
+
+
+def test_canonical_key_path_stem_fallback_triggers_for_wiki_pages_without_title():
+    titleless_wiki = PageRecord(
+        path="wiki/concepts/example.md",
+        title="",
+        frontmatter={
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "Example concept.",
+        },
+        body="",
+    )
+    named_wiki = PageRecord(
+        path="wiki/concepts/other.md",
+        title="example",
+        frontmatter={
+            "title": "example",
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "Example concept.",
+        },
+        body="",
+    )
+    findings = lint_pages([titleless_wiki, named_wiki])
+    assert any(f.code == "DUPLICATE_CANONICAL_PAGE" for f in findings), (
+        "wiki page without title must canonicalize on its path stem and collide with a matching titled wiki page"
+    )
+
+
+def test_canonical_key_honors_raw_source_that_opts_into_canonical():
+    raw_canonical = PageRecord(
+        path="raw/example.md",
+        title="Example",
+        frontmatter={
+            "title": "Example",
+            "type": "raw_source",
+            "lang": "en",
+            "role": "raw_source",
+            "layer": "source",
+            "source_of_truth": "canonical",
+        },
+        body="",
+    )
+    wiki_page = PageRecord(
+        path="wiki/concepts/example.md",
+        title="Example",
+        frontmatter={
+            "title": "Example",
+            "type": "concept",
+            "lang": "en",
+            "role": "concept",
+            "layer": "wiki",
+            "summary": "Example concept.",
+            "source_of_truth": "canonical",
+        },
+        body="",
+    )
+    findings = lint_pages([raw_canonical, wiki_page])
+    assert any(f.code == "DUPLICATE_CANONICAL_PAGE" for f in findings), (
+        "raw source explicitly marked source_of_truth: canonical must still participate in canonical identity"
+    )
+
+
+def test_lint_resolves_filename_and_relative_path_links():
+    pages = [
+        PageRecord(
+            path="Agent相关论文/REACT_ SYNERGIZING REASONING AND ACTING IN LANGUAGE MODELS-2023.3.md",
+            title="ReAct Paper",
+            body="",
+            frontmatter={
+                "title": "ReAct Paper",
+                "type": "raw_source",
+                "lang": "en",
+                "role": "raw_source",
+                "layer": "source",
+                "summary": "ReAct source.",
+            },
+        ),
+        PageRecord(
+            path="wiki/concepts/Agent设计模式.md",
+            title="Agent设计模式",
+            body="[[Agent相关论文/REACT_ SYNERGIZING REASONING AND ACTING IN LANGUAGE MODELS-2023.3.md]]",
+            frontmatter={
+                "title": "Agent设计模式",
+                "type": "concept",
+                "lang": "zh",
+                "role": "concept",
+                "layer": "wiki",
+                "summary": "Agent patterns.",
+            },
+        ),
+        PageRecord(
+            path="wiki/INDEX.md",
+            title="INDEX",
+            body="[[Agent设计模式]]",
+            frontmatter={
+                "title": "INDEX",
+                "type": "meta",
+                "lang": "en",
+                "role": "index",
+                "layer": "wiki",
+                "summary": "Index.",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert findings == []
+
+
+def test_lint_ignores_folderish_and_code_block_pseudo_links():
+    pages = [
+        PageRecord(
+            path="wiki/concepts/RAG与知识增强.md",
+            title="RAG与知识增强",
+            body=(
+                "See [[output/reports/]].\n\n"
+                "tokens = [[\"to\"]]\n\n"
+                "embeddings = [[instruction, sentence]]\n\n"
+                "```python\n"
+                "weights = [[0.12, 0.45]]\n"
+                "```\n"
+            ),
+            frontmatter={
+                "title": "RAG与知识增强",
+                "type": "concept",
+                "lang": "zh",
+                "role": "concept",
+                "layer": "wiki",
+                "summary": "RAG.",
+            },
+        ),
+    ]
+
+    findings = lint_pages(pages)
+
+    assert findings == [f for f in findings if f.code == "ORPHAN_PAGE"]
+
+
+def test_example_vault_has_no_lint_findings():
+    repo_root = Path(__file__).resolve().parents[1]
+    pages = scan_markdown_files(repo_root / "examples" / "minimal-vault")
+
+    findings = lint_pages(pages)
+
+    assert findings == []

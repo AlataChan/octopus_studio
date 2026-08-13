@@ -1,0 +1,38 @@
+{
+  "upstream": {
+    "repo": "https://github.com/msitarzewski/agency-agents",
+    "branch": "main",
+    "license": "MIT"
+  },
+  "includeDivisions": [
+    "academic",
+    "design",
+    "engineering",
+    "examples",
+    "integrations",
+    "marketing",
+    "paid-media",
+    "product",
+    "project-management",
+    "sales",
+    "strategy",
+    "support",
+    "testing"
+  ],
+  "excludeDivisions": [
+    "game-development",
+    "spatial-computing",
+    "scripts"
+  ],
+  "specializedOnly": [
+    "agents-orchestrator.md",
+    "specialized-workflow-architect.md"
+  ],
+  "divisionExcludes": {
+    "marketing": [
+      "marketing-reddit-community-builder.md",
+      "marketing-zhihu-strategist.md",
+      "marketing-linkedin-content-creator.md"
+    ]
+  }
+}

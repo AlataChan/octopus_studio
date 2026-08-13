@@ -1,0 +1,34 @@
+.env.production
+.env.development
+.env.test
+server/.env
+coverage/
+storage/assets/*
+!storage/assets/anything-llm.png
+storage/images/*
+storage/documents/*
+storage/analysis-files/
+storage/comkey/*
+storage/tmp/*
+storage/vector-cache/*.json
+storage/exports
+storage/imports
+storage/plugins/agent-skills/*
+storage/plugins/agent-flows/*
+storage/plugins/office-extensions/*
+storage/plugins/anythingllm_mcp_servers.json
+!storage/documents/DOCUMENTS.md
+storage/direct-uploads
+logs/server.log
+*.db
+*.db-journal
+storage/lancedb
+public/
+
+# For legacy copies of repo
+documents
+vector-cache
+yarn-error.log
+
+# Local SSL Certs for HTTPS
+sslcert

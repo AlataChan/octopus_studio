@@ -1,0 +1,166 @@
+# Alata Studio + Ollama 一键部署配置
+# 适用场景：本地 LLM 部署，无需公网 API
+#
+# 注意：
+# - 该文件为“本地/自建模型”场景准备，不建议用于腾讯云等云端生产部署。
+# - 云端部署建议直接使用 API Key（OpenAI/DeepSeek 等），并使用 `docker/docker-compose.cloud.single-node.yml`
+#   或 `docker/docker-compose.cloud.single-node.image.yml`（拉取你自己的镜像）。
+# - 请不要与 `docker/docker-compose.yml` 或 `docker/docker-compose.alata.yml` 同时运行（端口/容器名可能冲突）。
+
+services:
+  # Ollama 服务 - 本地 LLM 推理引擎
+  ollama:
+    image: ollama/ollama:latest
+    container_name: alata-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    
+    # GPU 支持（如果有 NVIDIA GPU，取消注释）
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    
+    # 环境变量配置
+    environment:
+      # 并发配置
+      - OLLAMA_NUM_PARALLEL=2              # 并发请求数
+      - OLLAMA_MAX_LOADED_MODELS=1         # 同时加载的模型数
+      
+      # 性能配置
+      - OLLAMA_NUM_CTX=4096                # 上下文长度
+      - OLLAMA_KEEP_ALIVE=5m               # 模型保持加载时间
+      
+      # 网络配置
+      - OLLAMA_HOST=0.0.0.0:11434          # 监听地址
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    networks:
+      - alata-network
+
+  # Alata Studio 主服务
+  alata-studio:
+    image: mintplexlabs/anythingllm:latest # upstream image, intentional
+    container_name: alata-studio
+    
+    # 等待 Ollama 服务健康后再启动
+    depends_on:
+      ollama:
+        condition: service_healthy
+    
+    ports:
+      - "3001:3001"
+    
+    # 环境变量配置
+    environment:
+      # 存储配置
+      - STORAGE_DIR=/app/server/storage
+      
+      # LLM 配置
+      - LLM_PROVIDER=ollama
+      - OLLAMA_BASE_PATH=http://ollama:11434
+      - OLLAMA_MODEL_PREF=qwen2.5:7b
+      - OLLAMA_MODEL_TOKEN_LIMIT=8192
+      
+      # Embedding 配置
+      - EMBEDDING_ENGINE=ollama
+      - EMBEDDING_BASE_PATH=http://ollama:11434
+      - EMBEDDING_MODEL_PREF=nomic-embed-text:latest
+      
+      # 向量数据库配置
+      - VECTOR_DB=lancedb
+      
+      # 性能配置
+      - LOCAL_LLM_CONCURRENT_REQUESTS=2
+      - LOCAL_LLM_MAX_TOKENS=4096
+      
+      # 可选：多用户模式
+      # - AUTH_TOKEN=your-secret-token
+      # - JWT_SECRET=your-jwt-secret
+      
+      # 可选：日志级别
+      # - LOG_LEVEL=info
+    
+    volumes:
+      - alata_storage:/app/server/storage
+      - alata_hotdir:/app/server/storage/hot-dir
+      - alata_outputs:/app/server/storage/outputs
+    
+    restart: unless-stopped
+    
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+    
+    networks:
+      - alata-network
+
+# 持久化存储卷
+volumes:
+  # Ollama 模型存储（约 10-50GB，根据模型数量）
+  ollama_data:
+    driver: local
+  
+  # Alata Studio 主存储
+  alata_storage:
+    driver: local
+  
+  # 热目录（文档上传）
+  alata_hotdir:
+    driver: local
+  
+  # 输出目录
+  alata_outputs:
+    driver: local
+
+# 网络配置
+networks:
+  alata-network:
+    driver: bridge
+
+# 使用说明：
+# 
+# 1. 启动服务：
+#    docker-compose -f docker-compose.ollama.yml up -d
+# 
+# 2. 查看日志：
+#    docker-compose -f docker-compose.ollama.yml logs -f
+# 
+# 3. 下载模型（首次启动后）：
+#    docker exec alata-ollama ollama pull qwen2.5:7b
+#    docker exec alata-ollama ollama pull nomic-embed-text:latest
+# 
+# 4. 访问服务：
+#    http://localhost:3001
+# 
+# 5. 停止服务：
+#    docker-compose -f docker-compose.ollama.yml down
+# 
+# 6. 完全清理（包括数据）：
+#    docker-compose -f docker-compose.ollama.yml down -v
+# 
+# GPU 支持：
+# - 取消注释 ollama 服务中的 deploy 部分
+# - 确保已安装 NVIDIA Container Toolkit
+# 
+# 自定义配置：
+# - 修改 OLLAMA_MODEL_PREF 更换默认模型
+# - 修改 OLLAMA_NUM_PARALLEL 调整并发数
+# - 修改端口映射避免冲突

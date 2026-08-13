@@ -1,0 +1,62 @@
+v-env
+.env
+!.env.example
+
+node_modules
+__pycache__
+v-env
+.DS_Store
+aws_cf_deploy_anything_llm.json
+yarn.lock
+!/yarn.lock
+*.bak
+.idea
+/.tmp/
+
+.claude/
+.ccb/
+.worktrees/
+**/.tmp/
+server/__tests__/.storage/
+__tests__/.storage/
+
+# Electron / Yarn 打包产物与缓存（不应提交到 Git）
+dist-electron/
+.electron-build/
+server/logs/
+collector/logs/
+logs/
+.yarn/
+.pnp.cjs
+.pnp.loader.mjs
+collector/.pnp.cjs
+collector/.pnp.loader.mjs
+services/paddleocr-service/venv/
+docs/skills/
+
+# Derived model caches (do not commit)
+storage/models/
+storage/runs/
+alata-im-gateway/data/
+
+# Agency importer local state
+scripts/import-agency-agents/.translation-cache.json
+scripts/import-agency-agents/.tmp-agency-agents/
+scripts/import-agency-agents/import-errors.log
+
+# Local tool / agent runtime state
+.plan/
+.plans/
+.augment/
+.serena/
+.sisyphus/
+.superpowers/
+.alataflow/
+.playwright-mcp/
+AGENTS.md
+
+# Runtime data and generated output
+storage/anythingllm.db
+output/
+octopus-packaged-web-debug.png
+settings-provider-fallback-fixed.png

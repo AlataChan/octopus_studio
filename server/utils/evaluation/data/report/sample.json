@@ -1,0 +1,156 @@
+{
+  "scenario": "report",
+  "version": "1.0",
+  "description": "报告类场景 Golden Set 示例（结构化报告生成）",
+  "createdAt": "2025-12-30T00:00:00Z",
+  "itemCount": 5,
+  "items": [
+    {
+      "id": "report-001",
+      "input": "生成一份Q3季度销售汇报，包含业绩完成情况、重点客户、下季度计划",
+      "expectedOutput": {
+        "structure": {
+          "title": "Q3季度销售汇报",
+          "sections": [
+            { "name": "业绩完成情况", "required": true },
+            { "name": "重点客户分析", "required": true },
+            { "name": "下季度工作计划", "required": true }
+          ]
+        },
+        "format": "docx",
+        "hasCitations": true
+      },
+      "category": "季度汇报",
+      "tags": ["销售", "汇报"],
+      "difficulty": "medium",
+      "metadata": {
+        "requiredSections": ["业绩完成情况", "重点客户", "下季度计划"],
+        "expectedFormat": "docx"
+      }
+    },
+    {
+      "id": "report-002",
+      "input": "根据用户调研数据生成产品需求文档PRD",
+      "expectedOutput": {
+        "structure": {
+          "title": "产品需求文档",
+          "sections": [
+            { "name": "背景与目标", "required": true },
+            { "name": "用户需求分析", "required": true },
+            { "name": "功能需求", "required": true },
+            { "name": "非功能需求", "required": false },
+            { "name": "里程碑与排期", "required": true }
+          ]
+        },
+        "format": "docx",
+        "hasCitations": true
+      },
+      "category": "PRD",
+      "tags": ["产品", "需求文档"],
+      "difficulty": "hard",
+      "metadata": {
+        "requiredSections": [
+          "背景与目标",
+          "用户需求分析",
+          "功能需求",
+          "里程碑与排期"
+        ],
+        "expectedFormat": "docx"
+      }
+    },
+    {
+      "id": "report-003",
+      "input": "汇总本周各部门的周报数据，生成公司周报",
+      "expectedOutput": {
+        "structure": {
+          "title": "公司周报",
+          "sections": [
+            { "name": "本周重点工作", "required": true },
+            { "name": "各部门进展", "required": true },
+            { "name": "问题与风险", "required": true },
+            { "name": "下周计划", "required": true }
+          ]
+        },
+        "format": "docx",
+        "hasCitations": false
+      },
+      "category": "周报",
+      "tags": ["汇报", "周报"],
+      "difficulty": "easy",
+      "metadata": {
+        "requiredSections": [
+          "本周重点工作",
+          "各部门进展",
+          "问题与风险",
+          "下周计划"
+        ]
+      }
+    },
+    {
+      "id": "report-004",
+      "input": "生成客户拜访记录表格",
+      "expectedOutput": {
+        "structure": {
+          "title": "客户拜访记录",
+          "columns": [
+            "日期",
+            "客户名称",
+            "拜访人",
+            "拜访目的",
+            "沟通内容",
+            "后续跟进"
+          ]
+        },
+        "format": "xlsx",
+        "hasCitations": false
+      },
+      "category": "表格报告",
+      "tags": ["表格", "客户"],
+      "difficulty": "easy",
+      "metadata": {
+        "expectedFormat": "xlsx",
+        "requiredColumns": [
+          "日期",
+          "客户名称",
+          "拜访人",
+          "拜访目的",
+          "沟通内容",
+          "后续跟进"
+        ]
+      }
+    },
+    {
+      "id": "report-005",
+      "input": "基于市场调研数据生成竞品分析报告",
+      "expectedOutput": {
+        "structure": {
+          "title": "竞品分析报告",
+          "sections": [
+            { "name": "调研背景", "required": true },
+            { "name": "竞品概览", "required": true },
+            { "name": "功能对比", "required": true },
+            { "name": "价格对比", "required": true },
+            { "name": "SWOT分析", "required": true },
+            { "name": "结论与建议", "required": true }
+          ]
+        },
+        "format": "pptx",
+        "hasCitations": true
+      },
+      "category": "分析报告",
+      "tags": ["竞品", "分析"],
+      "difficulty": "hard",
+      "metadata": {
+        "requiredSections": [
+          "调研背景",
+          "竞品概览",
+          "功能对比",
+          "价格对比",
+          "SWOT分析",
+          "结论与建议"
+        ],
+        "expectedFormat": "pptx"
+      }
+    }
+  ]
+}

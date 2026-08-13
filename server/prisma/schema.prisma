@@ -1,0 +1,1648 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Uncomment the following lines and comment out the SQLite datasource block above to use PostgreSQL
+// Make sure to set the correct DATABASE_URL in your .env file
+// After swapping run `yarn prisma:setup` from the root directory to migrate the database
+//
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+datasource db {
+  provider = "sqlite"
+  url      = "file:../storage/anythingllm.db"
+}
+
+model api_keys {
+  id            Int       @id @default(autoincrement())
+  secret        String?   @unique
+  createdBy     Int?
+  createdAt     DateTime  @default(now())
+  lastUpdatedAt DateTime  @default(now())
+  // V1.5 扩展字段
+  name          String? // API Key 名称/描述
+  isActive      Boolean   @default(true) // 是否启用
+  expiresAt     DateTime? // 过期时间，null 表示永不过期
+  rateLimit     Int?      @default(100) // 每分钟请求限制
+  lastUsedAt    DateTime? // 最后使用时间
+  usageCount    Int       @default(0) // 总使用次数
+  permissions   String? // JSON: 权限配置 {"workspaces": ["*"], "endpoints": ["chat", "embed"]}
+}
+
+model workspace_documents {
+  id                   Int                   @id @default(autoincrement())
+  docId                String                @unique
+  filename             String
+  docpath              String
+  workspaceId          Int
+  metadata             String?
+  pinned               Boolean?              @default(false)
+  watched              Boolean?              @default(false)
+  createdAt            DateTime              @default(now())
+  lastUpdatedAt        DateTime              @default(now())
+  workspace            workspaces            @relation(fields: [workspaceId], references: [id])
+  document_sync_queues document_sync_queues?
+}
+
+model invites {
+  id            Int      @id @default(autoincrement())
+  code          String   @unique
+  status        String   @default("pending")
+  claimedBy     Int?
+  workspaceIds  String?
+  createdAt     DateTime @default(now())
+  createdBy     Int
+  lastUpdatedAt DateTime @default(now())
+}
+
+model system_settings {
+  id            Int      @id @default(autoincrement())
+  label         String   @unique
+  value         String?
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
+}
+
+model users {
+  id                          Int                           @id @default(autoincrement())
+  username                    String?                       @unique
+  password                    String
+  pfpFilename                 String?
+  role                        String                        @default("default")
+  suspended                   Int                           @default(0)
+  seen_recovery_codes         Boolean?                      @default(false)
+  createdAt                   DateTime                      @default(now())
+  lastUpdatedAt               DateTime                      @default(now())
+  dailyMessageLimit           Int?
+  bio                         String?                       @default("")
+  // Phase 1: 用户偏好元数据 (JSON 格式存储 language/explanation_depth/code_style)
+  metadata                    String?
+  workspace_chats             workspace_chats[]
+  workspace_users             workspace_users[]
+  embed_configs               embed_configs[]
+  embed_chats                 embed_chats[]
+  threads                     workspace_threads[]
+  recovery_codes              recovery_codes[]
+  password_reset_tokens       password_reset_tokens[]
+  workspace_agent_invocations workspace_agent_invocations[]
+  slash_command_presets       slash_command_presets[]
+  browser_extension_api_keys  browser_extension_api_keys[]
+  temporary_auth_tokens       temporary_auth_tokens[]
+  system_prompt_variables     system_prompt_variables[]
+  prompt_history              prompt_history[]
+  desktop_mobile_devices      desktop_mobile_devices[]
+  workspace_parsed_files      workspace_parsed_files[]
+  agent_trajectories          agent_trajectories[]
+  // 计费系统关联 (Billing System Relations)
+  wallet                      user_wallets?
+  // 通知系统关联 (Notification System Relations)
+  notifications               notifications[]
+}
+
+model recovery_codes {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  code_hash String
+  createdAt DateTime @default(now())
+  user      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model password_reset_tokens {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model document_vectors {
+  id            Int      @id @default(autoincrement())
+  docId         String
+  vectorId      String
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
+}
+
+model welcome_messages {
+  id         Int      @id @default(autoincrement())
+  user       String
+  response   String
+  orderIndex Int?
+  createdAt  DateTime @default(now())
+}
+
+model workspaces {
+  id                             Int                              @id @default(autoincrement())
+  name                           String
+  slug                           String                           @unique
+  vectorTag                      String?
+  createdAt                      DateTime                         @default(now())
+  openAiTemp                     Float?
+  openAiHistory                  Int                              @default(40)
+  lastUpdatedAt                  DateTime                         @default(now())
+  openAiPrompt                   String?
+  similarityThreshold            Float?                           @default(0.25)
+  chatProvider                   String?
+  chatModel                      String?
+  topN                           Int?                             @default(4)
+  chatMode                       String?                          @default("chat")
+  pfpFilename                    String?
+  agentProvider                  String?
+  agentModel                     String?
+  queryRefusalResponse           String?
+  vectorSearchMode               String?                          @default("default")
+  enhancedIntelligence           Boolean?                         @default(false)
+  disableTierRouting             Boolean                          @default(false)
+  trajectoryMemoryDisabled       Boolean                          @default(false)
+  workspace_users                workspace_users[]
+  documents                      workspace_documents[]
+  workspace_suggested_messages   workspace_suggested_messages[]
+  embed_configs                  embed_configs[]
+  threads                        workspace_threads[]
+  workspace_agent_invocations    workspace_agent_invocations[]
+  prompt_history                 prompt_history[]
+  workspace_parsed_files         workspace_parsed_files[]
+  workspace_assistants           workspace_assistants[]
+  workspace_graph_nodes          workspace_graph_nodes[]
+  workspace_graph_edges          workspace_graph_edges[]
+  workspace_graph_builds         workspace_graph_builds[]
+  workflow_pending_confirmations workflow_pending_confirmations[]
+  runs                           runs[]
+  fdeWorkflowDrafts              fde_workflow_drafts[]
+  fdeAuthoringSessions           fde_authoring_sessions[]
+  agent_trajectories             agent_trajectories[]
+  channel_bindings               channel_bindings[]
+  channel_sessions               channel_sessions[]
+  chat_metrics                   chat_metrics[]
+  scheduled_tasks                scheduled_tasks[]
+  document_review_tasks          document_review_tasks[]
+  // 计费系统关联 (Billing System Relations)
+  budget                         workspace_budgets?
+  // 图像画布关联 (Image Canvas Relations)
+  image_assets                   image_assets[]
+  image_projects                 image_projects[]
+  image_jobs                     image_jobs[]
+  // SkillHub 关联 (SkillHub Relations)
+  skill_installations            skill_installations[]
+  skill_hub_jobs                 skill_hub_jobs[]
+  external_thread_state          external_thread_state[]
+}
+
+model workspace_threads {
+  id                     Int                      @id @default(autoincrement())
+  name                   String
+  slug                   String                   @unique
+  workspace_id           Int
+  user_id                Int?
+  metadata               String? // JSON: 存储对话摘要等元数据
+  createdAt              DateTime                 @default(now())
+  lastUpdatedAt          DateTime                 @default(now())
+  workspace              workspaces               @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
+  user                   users?                   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  workspace_parsed_files workspace_parsed_files[]
+  channel_sessions       channel_sessions[]
+
+  @@index([workspace_id])
+  @@index([user_id])
+}
+
+model external_thread_state {
+  id                       Int        @id @default(autoincrement())
+  workspace_id             Int
+  platform                 String // "dify" | "ragflow" (validated in application code)
+  external_app_id          String // Dify app UUID or RAGFlow chat/agent ID
+  scope_key                String // "thread:<id>" | "apikey-session:<id>" | "embed-default:<id>"
+  external_conversation_id String?
+  external_session_id      String?
+  last_used_at             DateTime   @default(now())
+  expires_at               DateTime?
+  created_at               DateTime   @default(now())
+  updated_at               DateTime   @updatedAt
+  workspace                workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
+
+  @@unique([workspace_id, platform, external_app_id, scope_key])
+  @@index([workspace_id, platform])
+  @@index([last_used_at])
+}
+
+model workspace_suggested_messages {
+  id            Int        @id @default(autoincrement())
+  workspaceId   Int
+  heading       String
+  message       String
+  createdAt     DateTime   @default(now())
+  lastUpdatedAt DateTime   @default(now())
+  workspace     workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+model workspace_chats {
+  id             Int      @id @default(autoincrement())
+  workspaceId    Int
+  prompt         String
+  response       String
+  include        Boolean  @default(true)
+  user_id        Int?
+  thread_id      Int? // No relation to prevent whole table migration
+  api_session_id String? // String identifier for only the dev API to partition chats in any mode.
+  assistant_id   String? // Which AI employee (assistant) this chat belongs to; null = plain workspace chat (no employee). Enables per-assistant conversation isolation.
+  createdAt      DateTime @default(now())
+  lastUpdatedAt  DateTime @default(now())
+  feedbackScore  Boolean?
+  users          users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model workspace_agent_invocations {
+  id            Int      @id @default(autoincrement())
+  uuid          String   @unique
+  prompt        String // Contains agent invocation to parse + option additional text for seed.
+  metadata      String   @default("{}") // JSON string: { authorizationMode, runId, threadSlug, ... }
+  closed        Boolean  @default(false)
+  success       Boolean? // 调用是否成功 (null=进行中, true=成功, false=失败)
+  user_id       Int?
+  thread_id     Int? // No relation to prevent whole table migration
+  workspace_id  Int
+  assistant_id  String? // AI员工ID,用于关联选中的员工配置
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
+
+  // 用户评分 (Phase 2 知识 ETL)
+  user_rating Int? // 1-5 星评分（null = 未评分）
+
+  // 知识指标 - 记录 Planning 决策时的知识覆盖信息
+  knowledge_coverage   String? // 知识覆盖度: "low" | "medium" | "high"
+  graph_nodes_used     Int? // 使用的图谱节点数
+  vector_sources_used  Int? // 使用的向量文档来源数
+  planning_duration_ms Int? // Planning 阶段耗时 (毫秒)
+  user                 users?                             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  workspace            workspaces                         @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  steps                workspace_agent_invocation_steps[]
+
+  @@index([uuid])
+  @@index([assistant_id])
+  @@index([success])
+  @@index([knowledge_coverage])
+  @@index([success, user_rating]) // ETL 查询优化
+  @@index([createdAt]) // 时间范围查询优化
+}
+
+// AI员工调用步骤追踪表 - 用于记录每次Agent调用中的工具执行步骤
+model workspace_agent_invocation_steps {
+  id             Int      @id @default(autoincrement())
+  invocation_id  Int // 关联 workspace_agent_invocations.id
+  step_index     Int // 步骤序号 (0, 1, 2...)
+  step_type      String // 'tool_call' | 'flow_call' | 'error' | 'user_interrupt'
+  tool_name      String? // 工具名称 (如 'web-scraping', 'rag-memory')
+  input_summary  String? // 输入参数摘要 (脱敏后, max 1000 chars)
+  output_summary String? // 输出结果摘要 (脱敏后, max 1000 chars)
+  success        Boolean  @default(true)
+  error_message  String? // 错误信息
+  duration_ms    Int? // 执行耗时 (毫秒)
+  created_at     DateTime @default(now())
+
+  invocation workspace_agent_invocations @relation(fields: [invocation_id], references: [id], onDelete: Cascade)
+
+  @@index([invocation_id, step_index])
+  @@index([tool_name])
+  @@index([created_at])
+}
+
+model workspace_users {
+  id            Int        @id @default(autoincrement())
+  user_id       Int
+  workspace_id  Int
+  createdAt     DateTime   @default(now())
+  lastUpdatedAt DateTime   @default(now())
+  workspaces    workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  users         users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model cache_data {
+  id            Int       @id @default(autoincrement())
+  name          String
+  data          String
+  belongsTo     String?
+  byId          Int?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now())
+  lastUpdatedAt DateTime  @default(now())
+}
+
+model embed_configs {
+  id                         Int           @id @default(autoincrement())
+  uuid                       String        @unique
+  enabled                    Boolean       @default(false)
+  chat_mode                  String        @default("query")
+  allowlist_domains          String?
+  allow_model_override       Boolean       @default(false)
+  allow_temperature_override Boolean       @default(false)
+  allow_prompt_override      Boolean       @default(false)
+  max_chats_per_day          Int?
+  max_chats_per_session      Int?
+  message_limit              Int?          @default(20)
+  workspace_id               Int
+  createdBy                  Int?
+  usersId                    Int?
+  createdAt                  DateTime      @default(now())
+  workspace                  workspaces    @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
+  embed_chats                embed_chats[]
+  users                      users?        @relation(fields: [usersId], references: [id])
+}
+
+model embed_chats {
+  id                     Int           @id @default(autoincrement())
+  prompt                 String
+  response               String
+  session_id             String
+  include                Boolean       @default(true)
+  connection_information String?
+  embed_id               Int
+  usersId                Int?
+  createdAt              DateTime      @default(now())
+  embed_config           embed_configs @relation(fields: [embed_id], references: [id], onDelete: Cascade)
+  users                  users?        @relation(fields: [usersId], references: [id])
+}
+
+model event_logs {
+  id         Int      @id @default(autoincrement())
+  event      String
+  metadata   String?
+  userId     Int?
+  occurredAt DateTime @default(now())
+
+  @@index([event])
+}
+
+model tier_routing_preview_tokens {
+  token        String    @id
+  adminUserId  Int
+  tierMapHash  String
+  snapshotHash String
+  expiresAt    DateTime
+  consumedAt   DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@index([adminUserId])
+  @@index([expiresAt])
+}
+
+model slash_command_presets {
+  id            Int      @id @default(autoincrement())
+  command       String
+  prompt        String
+  description   String
+  uid           Int      @default(0) // 0 is null user
+  userId        Int?
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @default(now())
+  user          users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([uid, command])
+}
+
+model document_sync_queues {
+  id             Int                        @id @default(autoincrement())
+  staleAfterMs   Int                        @default(604800000) // 7 days
+  nextSyncAt     DateTime
+  createdAt      DateTime                   @default(now())
+  lastSyncedAt   DateTime                   @default(now())
+  workspaceDocId Int                        @unique
+  workspaceDoc   workspace_documents?       @relation(fields: [workspaceDocId], references: [id], onDelete: Cascade)
+  runs           document_sync_executions[]
+}
+
+model document_sync_executions {
+  id        Int                  @id @default(autoincrement())
+  queueId   Int
+  status    String               @default("unknown")
+  result    String?
+  createdAt DateTime             @default(now())
+  queue     document_sync_queues @relation(fields: [queueId], references: [id], onDelete: Cascade)
+}
+
+model browser_extension_api_keys {
+  id            Int      @id @default(autoincrement())
+  key           String   @unique
+  user_id       Int?
+  createdAt     DateTime @default(now())
+  lastUpdatedAt DateTime @updatedAt
+  user          users?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model temporary_auth_tokens {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model system_prompt_variables {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String?
+  description String?
+  type        String   @default("system") // system, user, dynamic
+  userId      Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model prompt_history {
+  id          Int        @id @default(autoincrement())
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  workspaceId Int
+  prompt      String
+  modifiedBy  Int?
+  modifiedAt  DateTime   @default(now())
+  user        users?     @relation(fields: [modifiedBy], references: [id])
+
+  @@index([workspaceId])
+}
+
+// Schema specific to mobile app <> Desktop app connection
+model desktop_mobile_devices {
+  id         Int      @id @default(autoincrement())
+  deviceOs   String
+  deviceName String
+  token      String   @unique
+  approved   Boolean  @default(false)
+  userId     Int?
+  createdAt  DateTime @default(now())
+  user       users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model workspace_parsed_files {
+  id                 Int                @id @default(autoincrement())
+  filename           String             @unique
+  workspaceId        Int
+  userId             Int?
+  threadId           Int?
+  metadata           String?
+  tokenCountEstimate Int?               @default(0)
+  createdAt          DateTime           @default(now())
+  workspace          workspaces         @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user               users?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thread             workspace_threads? @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+// ============================================
+// 助手库模块 (Assistant Library Module)
+// ============================================
+
+model assistant_templates {
+  id                String  @id @default(uuid())
+  name              String
+  description       String
+  icon              String?
+  category          String
+  seedCategory      String? // official | demo | test; null means user/unclassified
+  tags              String? // JSON array stored as string
+  industry          String?
+  systemPrompt      String?
+  agentFlowId       String?
+  internalRoles     String? // JSON array of internal roles (for orchestration assistants)
+  defaultTools      String? // JSON stored as string
+  defaultMCPServers String? // JSON stored as string
+  recommendedModel  String?
+
+  // 插件与来源元数据（对齐 Cherry Agent/Command/Skill，但采用 DB 化存储）
+  sourceType  String? @default("builtin") // 插件来源：builtin | markdown | remote
+  pluginType  String? @default("agent") // 插件类型：agent | command | skill
+  version     String? // 语义化版本号，例如 1.0.0
+  contentHash String? // 插件内容 SHA-256 哈希，用于版本/完整性校验
+  originPath  String? // 源 Markdown/目录路径或远程标识
+
+  // 安全与权限默认配置（Workspace 安装时可在实例级通过 customConfig 覆盖/收紧）
+  defaultPermissionMode    String? @default("default") // default | acceptEdits | bypass | plan
+  defaultAllowedTools      String? // JSON: string[]，默认允许使用的工具白名单
+  defaultAutoApprovedTools String? // JSON: string[]，无需二次确认即可执行的工具
+  resourceScopes           String? // JSON: ResourceScope[]，默认资源访问范围
+
+  // AI 员工相关字段 (AI Employee Fields)
+  avatarUrl      String? // 员工头像 URL
+  employeeName   String? // 员工姓名（如"张一龙"）
+  employeeTitle  String? // 职位（如"首席技术官 CTO"）
+  employeeBio    String? // 员工简介
+  skills         String? // JSON array of skills (如["战略管理", "组织优化"])
+  workExperience String? // JSON array of work experience
+  certifications String? // JSON array of certifications
+
+  // 外部平台集成字段 (External Platform Integration)
+  platformType   String? @default("internal") // "internal" | "dify" | "ragflow" | "n8n" | "coze" | "fastgpt"
+  platformConfig String? // JSON: { baseUrl, apiKey, appId, ... }
+
+  // 知识模式字段 (Knowledge Mode)
+  knowledgeModeTemplate String? @default("workspace") // "workspace" | "platform" | "none"
+
+  // Agency-Agents 集成：来源元数据扩展 (Import Source Metadata)
+  sourceUrl     String? // 源 markdown 完整 URL
+  sourceLicense String? // 源内容许可证（如 MIT）
+  sourceCommit  String? // import 时的源仓库 commit hash
+
+  // Agency-Agents 集成：人设字段 (Persona Styling)
+  vibe  String? // 一句话人格描述
+  color String? // 主题色 hex
+
+  isGlobal             Boolean                @default(true)
+  isDefault            Boolean                @default(false) // 是否为默认助手，创建 Workspace 时自动安装
+  tenantId             String? // 预留字段，V1 不使用
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  workspace_assistants workspace_assistants[]
+
+  @@index([category, isGlobal])
+  @@index([seedCategory])
+  @@index([tenantId])
+  @@index([sourceType, pluginType]) // 用于按插件来源和类型筛选
+  @@index([contentHash]) // 用于版本校验和 Hub 更新检测
+  @@index([isDefault])
+}
+
+model workspace_assistants {
+  id           String  @id @default(uuid())
+  workspaceId  Int
+  templateId   String
+  instanceName String?
+  customConfig String? // JSON stored as string
+  enabled      Boolean @default(true)
+  category     String? // official | demo | test; null means user/unclassified
+
+  // 员工来源 (Employee Source)
+  source String @default("hired") // "hired" | "default" | "custom"
+
+  // 知识模式覆盖 (Knowledge Mode Override)
+  knowledgeModeOverride String? // "workspace" | "platform" | "none", null means inherit from template
+
+  // 使用统计 (Usage Statistics) - V2 新增
+  lastUsedAt DateTime? // 最后使用时间
+  usageCount Int       @default(0) // 使用次数
+
+  createdAt DateTime            @default(now())
+  workspace workspaces          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  template  assistant_templates @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, templateId])
+  @@index([workspaceId])
+  @@index([templateId])
+  @@index([category])
+  @@index([source])
+}
+
+model workspace_molt_agents {
+  id            Int       @id @default(autoincrement())
+  workspace_id  Int
+  molt_agent_id String
+  display_name  String?
+  enabled       Boolean   @default(true)
+  metadata      String? // JSON serialized metadata
+  lastSeenAt    DateTime?
+  deletedAt     DateTime?
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  @@unique([workspace_id, molt_agent_id])
+  @@index([workspace_id])
+  @@index([deletedAt])
+}
+
+model workspace_molt_chats {
+  id                   Int       @id @default(autoincrement())
+  workspace_id         Int
+  molt_agent_id        String
+  scope_key            String
+  created_by_user_id   Int?
+  molt_thread_id       String
+  status               String    @default("active")
+  last_user_message_at DateTime?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+
+  @@unique([workspace_id, molt_agent_id, scope_key])
+  @@index([workspace_id, created_by_user_id])
+}
+
+// ============================================
+// 知识图谱模块 (Knowledge Graph Module)
+// ============================================
+
+model workspace_graph_nodes {
+  id          Int        @id @default(autoincrement())
+  workspaceId Int
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  nodeId     String // 业务侧的节点 ID，保证在 workspace 内唯一
+  type       String // doc | chat | tag | assistant | custom
+  label      String // 显示名称，如文档标题、标签名
+  externalId String? // 对应 workspace_documents.docId / workspace_chats.id 等
+  metadata   String? // JSON 字符串，存扩展属性
+
+  // 图分析字段（每次 Workspace 图构建后统一计算）
+  group String? // 社区发现算法聚类着色
+  rank  Float? // PageRank 值，用于节点大小
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workspaceId, nodeId])
+  @@index([workspaceId, type])
+  @@index([workspaceId, externalId])
+  @@index([workspaceId, group])
+}
+
+model workspace_graph_edges {
+  id          Int        @id @default(autoincrement())
+  workspaceId Int
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  fromNodeId String // 起始节点 ID
+  toNodeId   String // 目标节点 ID
+  relation   String // link | tag | similar | reference | assistant | custom
+  weight     Float? // 关系权重，可选（用于相似度）
+  metadata   String? // JSON 字符串，存扩展属性
+  group      String? // 投影来源分组，例如 kb
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([workspaceId, fromNodeId])
+  @@index([workspaceId, toNodeId])
+  @@index([workspaceId, relation])
+  @@index([workspaceId, group])
+}
+
+// 知识图谱构建任务表 (Knowledge Graph Build Tasks)
+model workspace_graph_builds {
+  id          String     @id @default(uuid())
+  workspaceId Int
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  status     String // pending, running, completed, failed, cancelled, stale
+  mode       String    @default("full") // full, incremental
+  options    String? // JSON 格式的构建选项
+  progress   Int       @default(0) // 0-100
+  message    String? // 当前进度描述
+  nodeCount  Int       @default(0)
+  edgeCount  Int       @default(0)
+  stats      String? // JSON 格式的统计信息
+  error      String? // JSON 格式的错误信息
+  retryable  Boolean   @default(false)
+  createdBy  Int? // User ID
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  finishedAt DateTime?
+
+  @@index([workspaceId, status])
+  @@index([createdAt(sort: Desc)])
+}
+
+// ============================================
+// HitL (Human-in-the-Loop) 确认机制
+// ============================================
+
+model workflow_pending_confirmations {
+  id          Int        @id @default(autoincrement())
+  workspaceId Int
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  userId   Int? // 发起用户 ID
+  threadId Int? // 关联的 thread ID
+  chatId   Int? // 关联的 chat ID
+
+  // 执行计划内容
+  planType    String // "tool_call" | "agent_flow" | "external_platform" | "custom"
+  planTitle   String // 计划标题,如 "调用 Web Search 工具"
+  planDetails String // JSON 字符串,存储详细信息
+  riskLevel   String // "low" | "medium" | "high"
+
+  // 状态
+  status String @default("pending") // "pending" | "approved" | "rejected" | "expired"
+
+  // 用户响应
+  userResponse String? // 用户的确认/拒绝理由
+  respondedAt  DateTime?
+
+  // 超时设置
+  expiresAt DateTime // 超时时间,超时后自动拒绝
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  runId     String? // nullable FK to runs (new runs system; null for legacy records)
+
+  @@index([workspaceId, status])
+  @@index([userId, status])
+  @@index([threadId])
+  @@index([runId])
+}
+
+// ============================================
+// 观测性指标 (Observability Metrics)
+// ============================================
+
+model chat_metrics {
+  id          Int        @id @default(autoincrement())
+  workspaceId Int
+  workspace   workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  userId      Int? // 用户 ID
+  assistantId String? // 助手 ID (如果使用了助手)
+
+  // 知识模式
+  knowledgeMode String @default("none") // "workspace" | "platform" | "none"
+
+  // 性能指标
+  responseTime Int @default(0) // 响应时间 (ms)
+  tokensUsed   Int @default(0) // Token 消耗
+
+  // 错误统计
+  hasError Boolean @default(false) // 是否有错误
+
+  // 扩展元数据
+  metadata String? // JSON 字符串,存储其他信息
+
+  createdAt DateTime @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([userId, createdAt])
+  @@index([assistantId, createdAt])
+  @@index([knowledgeMode, createdAt])
+}
+
+// ============================================
+// 计费系统 (Billing System) - V1.5
+// ============================================
+
+/// 用户钱包 - 存储账户余额和套餐信息
+model user_wallets {
+  id             Int      @id @default(autoincrement())
+  userId         Int      @unique
+  balance        Int      @default(0) // 积分余额 (1积分 = ¥0.001)
+  plan           String   @default("free") // free/starter/pro/enterprise
+  alertThreshold Int?     @default(10000) // 余额预警阈值(积分)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+/// 充值记录 - 记录所有充值操作
+model wallet_topups {
+  id         Int      @id @default(autoincrement())
+  userId     Int // 充值目标用户
+  amount     Int // 充值金额(积分)
+  method     String // bank_transfer/alipay/wechat/admin_grant
+  invoiceNo  String? // 发票号
+  operatorId Int? // 操作人(Admin) ID
+  note       String? // 备注
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([operatorId])
+  @@index([createdAt])
+}
+
+/// 使用记录 - 记录每次 API 调用的消耗
+model usage_logs {
+  id           Int      @id @default(autoincrement())
+  userId       Int // 用户 ID
+  workspaceId  Int // 工作区 ID
+  assistantId  String? // 助手 ID (可选)
+  modelGroup   String // international/domestic
+  modelName    String // claude-3.5-sonnet/deepseek-v3/qwen-max 等
+  inputTokens  Int      @default(0) // 输入 Token 数
+  outputTokens Int      @default(0) // 输出 Token 数
+  creditsUsed  Int // 消耗的积分
+  apiEndpoint  String // 调用的 API 端点
+  createdAt    DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([workspaceId, createdAt])
+  @@index([assistantId, createdAt])
+  @@index([modelGroup, createdAt])
+}
+
+/// Workspace 预算控制 - 按工作区设置月度预算上限
+model workspace_budgets {
+  id            Int        @id @default(autoincrement())
+  workspaceId   Int        @unique // 工作区 ID
+  monthlyLimit  Int? // 月度预算上限(积分), null 表示不限制
+  usedThisMonth Int        @default(0) // 本月已使用(积分)
+  resetDay      Int        @default(1) // 每月重置日(1-28)
+  alertAt       Int?       @default(80) // 预警阈值(百分比)
+  actionOnLimit String     @default("alert") // alert/throttle/block
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  workspace     workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+// ============================================
+// 站内通知系统
+// ============================================
+
+/// 用户通知 - 存储站内消息和告警
+model notifications {
+  id        Int      @id @default(autoincrement())
+  userId    Int // 接收用户 ID
+  type      String   @default("info") // info/warning/error/billing_alert/budget_alert
+  title     String // 通知标题
+  content   String // 通知内容
+  isRead    Boolean  @default(false) // 是否已读
+  metadata  String? // JSON 扩展数据
+  createdAt DateTime @default(now())
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+  @@index([type])
+}
+
+// A/B 测试实验分组记录表 - 内部实验阶段使用
+model experiment_assignments {
+  id         Int      @id @default(autoincrement())
+  userId     Int? // 用户 ID（可选，匿名用户为 null）
+  sessionId  String? // 会话 ID（用于匿名用户）
+  experiment String // 实验名称，如 "default_experiment"
+  variant    String // 分组变体，如 "with_knowledge" | "without_knowledge"
+  assignedAt DateTime @default(now())
+  metadata   String? // JSON 扩展数据
+
+  @@unique([userId, experiment])
+  @@index([experiment, variant])
+  @@index([assignedAt])
+}
+
+// ============================================
+// Platform 模式知识交互 (Platform Mode Knowledge Interaction)
+// ============================================
+
+// 用户偏好表 - 存储用户画像和偏好设置
+model user_preferences {
+  id          String @id @default(uuid())
+  userId      Int
+  workspaceId Int
+
+  // 用户画像
+  profileSummary String? // LLM 生成的用户画像摘要
+
+  // 偏好设置
+  preferredStyle   String? // 偏好的回答风格
+  topicsOfInterest String? // JSON: 感兴趣的话题
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, workspaceId])
+  @@index([userId])
+  @@index([workspaceId])
+}
+
+// 经验记忆表 - 记录平台表现和用户反馈
+model agent_experience_memory {
+  id String @id @default(uuid())
+
+  // 来源信息
+  platform String // dify | ragflow | n8n | internal
+  taskType String // qa | writing | analysis | coding | etc.
+
+  // 反馈信息
+  feedback String // positive | negative
+  context  String? // JSON: 上下文信息
+
+  // 关联信息
+  invocationId String?
+  workspaceId  Int?
+  userId       Int?
+
+  createdAt DateTime @default(now())
+
+  @@index([platform, taskType])
+  @@index([createdAt])
+  @@index([workspaceId])
+}
+
+// ============================================
+// 用户级定时任务
+// ============================================
+
+model scheduled_tasks {
+  id String @id @default(uuid())
+
+  // 归属
+  workspaceId     Int
+  createdByUserId Int? // 创建者用户 ID
+  assistantId     String? // 执行任务的 AI 员工 ID（关联 workspace_assistants）
+  threadSlug      String? // 执行任务的对话 Thread（可选，默认创建新对话）
+
+  // 任务信息
+  name        String // 任务名称，如 "每日日报提醒"
+  description String? // 任务描述（可由 AI 生成）
+
+  // 调度配置
+  scheduleType    String // "cron" | "once" | "interval"
+  cronExpression  String? // cron 表达式，如 "0 9 * * *"
+  executeAt       DateTime? // 一次性任务的执行时间
+  intervalMinutes Int? // 间隔执行的分钟数
+  timezone        String    @default("Asia/Shanghai")
+
+  // 执行动作
+  actionType   String // "send_message" | "agent_flow" | "webhook"
+  actionConfig String // JSON: { flowId, message, webhookUrl, inputVariables, ... }
+
+  // 状态
+  enabled       Boolean   @default(true)
+  lastRunAt     DateTime?
+  lastRunStatus String? // "success" | "failed" | "running"
+  lastRunError  String?
+  nextRunAt     DateTime? // 下次执行时间（用于优化查询）
+  runCount      Int       @default(0)
+
+  // 限制
+  maxRuns   Int? // 最大执行次数，null = 无限
+  expiresAt DateTime? // 过期时间
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace workspaces            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  logs      scheduled_task_logs[]
+
+  @@index([workspaceId, enabled])
+  @@index([enabled, nextRunAt])
+  @@index([scheduleType])
+}
+
+model scheduled_task_logs {
+  id     String @id @default(uuid())
+  taskId String
+
+  status     String // "success" | "failed" | "skipped"
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  durationMs Int? // 执行耗时（毫秒）
+
+  // 执行结果
+  output String? // JSON: 执行输出/结果
+  error  String? // 错误信息
+
+  task scheduled_tasks @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([taskId, startedAt])
+}
+
+// 文档审核任务队列
+model document_review_tasks {
+  id String @id @default(uuid())
+
+  // 归属
+  workspaceId Int
+  userId      Int? // 提交用户
+  assistantId String? // 执行审核的 AI 员工 ID
+
+  // 知识库文档关联（新增）
+  documentId String? // 知识库文档 ID（docId）
+
+  // 任务信息
+  inputPath  String // 输入文件路径（知识库模式下为 docpath）
+  outputPath String? // 输出文件路径
+  fileName   String // 原始文件名
+  fileSize   Int? // 文件大小（字节）
+
+  // 版本控制与去重
+  fileHash  String? // 文件内容 MD5 哈希
+  fileMtime BigInt? // 文件修改时间戳（毫秒）
+  version   Int     @default(1) // 审核版本号
+
+  // 状态
+  status   String @default("pending") // pending | processing | completed | failed
+  priority Int    @default(0)
+
+  // 审核配置
+  reviewType String  @default("standard") // standard | strict | quick
+  options    String? // JSON: 自定义审核参数
+
+  // 重试机制
+  retryCount  Int       @default(0)
+  maxRetries  Int       @default(3)
+  nextRetryAt DateTime?
+  lastError   String?
+
+  // 执行结果
+  result String? // JSON: { conclusion, issues[], suggestions[] }
+  error  String?
+
+  // 时间戳
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  workspace workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, status])
+  @@index([status, createdAt])
+  @@index([assistantId, status])
+  @@index([workspaceId, inputPath, status])
+  @@index([fileHash])
+  @@index([documentId])
+}
+
+// ============================================
+// 图像生成画布模块 (Image Generation Canvas Module)
+// ============================================
+
+/// 图像资产 - 存储所有图像文件的元数据
+model image_assets {
+  id          String  @id @default(uuid())
+  workspaceId Int
+  projectId   String? // 可选关联 image_projects
+
+  // 文件信息
+  filename  String // 原始文件名
+  mimeType  String // image/png, image/jpeg, image/webp
+  sizeBytes Int // 文件大小
+  width     Int // 图像宽度
+  height    Int // 图像高度
+
+  // 存储信息
+  storageBackend String  @default("local") // local | s3
+  storagePath    String // 存储路径/key
+  checksum       String? // SHA256 用于去重
+
+  // 元数据
+  metadata String? // JSON: { source, jobId, parentAssetId, ... }
+
+  // 生命周期
+  expiresAt DateTime? // 临时资产过期时间
+  createdAt DateTime  @default(now())
+
+  workspace workspaces      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project   image_projects? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([projectId])
+  @@index([checksum])
+  @@index([expiresAt])
+}
+
+/// 图像项目 - 管理图像编辑工程
+model image_projects {
+  id          String @id @default(uuid())
+  workspaceId Int
+  userId      Int? // 创建用户
+  threadId    Int? // 可选关联聊天线程
+
+  // 项目信息
+  title            String?
+  currentVersionId String? // 当前版本 ID
+
+  // 来源信息
+  sourceType     String // generated | imported
+  sourceProvider String? // 生成时的 provider
+  sourcePrompt   String? // 生成时的 prompt
+
+  // 状态
+  status String @default("active") // active | archived | deleted
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace workspaces               @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions  image_project_versions[]
+  assets    image_assets[]
+  jobs      image_jobs[]
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([threadId])
+  @@index([status])
+}
+
+/// 图像项目版本 - 记录每次编辑/生成的版本
+model image_project_versions {
+  id              String  @id @default(uuid())
+  projectId       String
+  parentVersionId String? // 基于哪个版本
+
+  // 输出
+  outputAssetId String // 渲染后的扁平图资产 ID
+
+  // 场景图 (核心)
+  sceneGraph String // JSON: SceneGraph 结构
+
+  // 派生资产
+  derivedAssets String? // JSON: { backgroundAssetId, foregroundAssetId, masks }
+
+  // 指标
+  metrics String? // JSON: { providerCost, durationMs }
+
+  // 版本信息
+  versionType String // raw | analyzed | edited | exported
+  description String? // 版本描述
+  jobId       String? // 关联的 Job ID
+
+  createdAt DateTime @default(now())
+
+  project image_projects @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([jobId])
+  @@index([createdAt])
+}
+
+/// 图像任务 - 异步任务队列
+model image_jobs {
+  id          String  @id @default(uuid())
+  workspaceId Int
+  projectId   String?
+  userId      Int?
+
+  // 任务类型与参数
+  type   String // generate | analyze | inpaint | outpaint | render | remove_bg
+  params String // JSON: 任务参数
+
+  // 状态机
+  status   String @default("pending") // pending | running | completed | failed | cancelled
+  progress Int? // 0-100 进度百分比
+
+  // 结果
+  outputAssetId String? // 成功后的输出资产
+  error         String? // JSON: { code, message, retryable }
+
+  // 重试与超时
+  retryCount Int @default(0)
+  maxRetries Int @default(3)
+  timeoutMs  Int @default(300000) // 5分钟
+
+  // 计费
+  providerUsed  String?
+  estimatedCost Float?
+  actualCost    Float?
+
+  // 时间戳
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  workspace workspaces      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  project   image_projects? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+  @@index([projectId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([status, createdAt])
+}
+
+/// 企业渠道网关：渠道账号配置（飞书/企微等）
+model channel_accounts {
+  id               Int       @id @default(autoincrement())
+  provider         String
+  accountId        String
+  encryptedSecrets String
+  tokenExpiresAt   DateTime?
+  status           String    @default("active")
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  bindings       channel_bindings[]
+  sessions       channel_sessions[]
+  message_events channel_message_events[]
+
+  @@unique([provider, accountId])
+  @@index([provider, status])
+}
+
+/// 企业渠道网关：路由绑定（channel/account/peer → workspace/agent）
+model channel_bindings {
+  id          String @id
+  provider    String
+  accountId   String
+  workspaceId Int
+
+  matchJson    String
+  routeJson    String
+  securityJson String
+
+  priority  Int      @default(0)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace workspaces       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  account   channel_accounts @relation(fields: [provider, accountId], references: [provider, accountId], onDelete: Cascade, onUpdate: Cascade)
+
+  sessions       channel_sessions[]
+  message_events channel_message_events[]
+
+  @@index([provider, accountId, priority])
+  @@index([workspaceId])
+}
+
+/// 企业渠道网关：会话映射（channel peer ↔ workspace thread）
+model channel_sessions {
+  id           Int     @id @default(autoincrement())
+  provider     String
+  accountId    String
+  peerId       String
+  peerType     String
+  senderId     String?
+  sessionKey   String  @unique
+  sessionScope String  @default("per-channel-peer")
+
+  bindingId   String
+  workspaceId Int
+  threadId    Int
+
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  account   channel_accounts  @relation(fields: [provider, accountId], references: [provider, accountId], onDelete: Cascade, onUpdate: Cascade)
+  binding   channel_bindings  @relation(fields: [bindingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  workspace workspaces        @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  thread    workspace_threads @relation(fields: [threadId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([provider, accountId, peerId])
+  @@index([provider, accountId, peerId, senderId])
+  @@index([bindingId])
+  @@index([threadId])
+}
+
+/// 企业渠道网关：消息事件审计（入站/出站/失败等）
+model channel_message_events {
+  id           Int      @id @default(autoincrement())
+  provider     String
+  accountId    String
+  eventId      String
+  messageId    String?
+  direction    String
+  bindingId    String?
+  sessionKey   String?
+  agentId      String?
+  status       String
+  errorType    String?
+  errorMessage String?
+  latencyMs    Int?
+  payloadJson  String?
+  createdAt    DateTime @default(now())
+
+  account channel_accounts  @relation(fields: [provider, accountId], references: [provider, accountId], onDelete: Cascade, onUpdate: Cascade)
+  binding channel_bindings? @relation(fields: [bindingId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@unique([provider, accountId, eventId])
+  @@index([provider, accountId, createdAt])
+  @@index([bindingId, createdAt])
+}
+
+/// 企业渠道网关：运行时注册表（embedded/sidecar/remote）
+model gateway_runtimes {
+  id               String    @id
+  name             String
+  mode             String
+  status           String    @default("offline")
+  authTokenHash    String
+  capabilitiesJson String?
+  metadataJson     String?
+  lastHeartbeatAt  DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  heartbeats gateway_runtime_heartbeats[]
+}
+
+/// 企业渠道网关：运行时心跳与指标快照
+model gateway_runtime_heartbeats {
+  id          Int      @id @default(autoincrement())
+  runtimeId   String
+  status      String
+  metricsJson String?
+  observedAt  DateTime @default(now())
+
+  runtime gateway_runtimes @relation(fields: [runtimeId], references: [id], onDelete: Cascade)
+
+  @@index([runtimeId, observedAt])
+}
+
+/// Skill Catalog：用于记录 Skills 来源/元数据与启用状态（可选）
+model skill_catalog {
+  id            Int       @id @default(autoincrement())
+  skillId       String
+  source        String
+  metadataJson  String?
+  enabled       Boolean   @default(true)
+  // Skill Hub indexed fields (optional denormalized columns)
+  name          String?
+  description   String?
+  version       String?
+  category      String?
+  tagsJson      String?
+  icon          String?
+  sourceUrl     String?
+  sourceHash    String?
+  license       String?
+  verified      Boolean   @default(false)
+  latestVersion String?
+  lastCheckedAt DateTime?
+  status        String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([skillId, source])
+  @@index([source, enabled])
+}
+
+/// Skill Installations：用于记录 Skill 安装/绑定关系（Workspace/Assistant 作用域）
+/// 注意：使用 scopeType+scopeId 避免 SQLite NULL 唯一约束陷阱
+model skill_installations {
+  id          Int      @id @default(autoincrement())
+  skillId     String
+  workspaceId Int
+  scopeType   String // "workspace" | "assistant"
+  scopeId     String // "__workspace__" | assistantId
+  status      String   @default("ready") // "ready" | "needs_configuration" | "error"
+  sgaServerId String? // links to SGA Hub server ID
+  metadata    String? // JSON string for credential fields, tool count, etc.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workspace workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([skillId, workspaceId, scopeType, scopeId])
+  @@index([workspaceId])
+  @@index([skillId])
+  @@index([sgaServerId])
+}
+
+/// Skill Hub Jobs：用于把关键生命周期操作落为“可追踪任务”（Mission Control / Ops 看板）
+/// - 独立于 event_logs：event_logs 仅做追加型审计；jobs 承担状态机
+model skill_hub_jobs {
+  id          String    @id @default(uuid())
+  type        String
+  status      String
+  skillId     String?
+  workspaceId Int?
+  scopeType   String?
+  scopeId     String?
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+  resultJson  String?
+  error       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  workspace workspaces? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId, createdAt])
+  @@index([type, status, createdAt])
+  @@index([skillId])
+}
+
+// ============================================
+// Live Canvas — Run 系统
+// ============================================
+
+model runs {
+  id                 String               @id @default(uuid())
+  threadId           String
+  workspaceId        Int
+  workspace          workspaces           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  triggerType        String // "ui" | "im" | "cron" | "webhook" | "manual"
+  triggerId          String?
+  status             String               @default("queued")
+  // "queued"|"running"|"blocked"|"succeeded"|"failed"|"cancelled"
+  surfaceId          String?
+  startedAt          DateTime?
+  completedAt        DateTime?
+  errorCode          String?
+  errorDetail        String?
+  metadata           String               @default("{}") // JSON string (SQLite has no Json type)
+  engine             String?
+  stateVersion       Int                  @default(0)
+  eventSeq           Int                  @default(0)
+  fdeWorkflowDraftId String?
+  fdeWorkflowDraft   fde_workflow_drafts? @relation(fields: [fdeWorkflowDraftId], references: [id], onDelete: SetNull)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  artifacts        run_artifacts[]
+  events           run_events[]
+  fdeRunCheckpoint fde_run_checkpoints?
+
+  @@index([threadId])
+  @@index([workspaceId, status])
+  @@index([triggerType, triggerId])
+  @@map("runs")
+}
+
+model fde_workflow_drafts {
+  id                        String     @id @default(uuid())
+  workspaceId               Int
+  workspace                 workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  fdeSessionId              String?
+  fdeFromTurnId             String?
+  fdeToTurnId               String?
+  diffJson                  String?
+  studioReviewPolicyVersion String     @default("1")
+  lineageKey                String
+  revision                  Int        @default(1)
+  parentDraftId             String?
+  name                      String
+  contract                  String     @default("studio-v1")
+  targetVersion             String     @default("1")
+  schemaVersion             String     @default("1.0")
+  compilerVersion           String
+  sourceIrVersion           String
+  sourceIrHash              String
+  specJson                  String
+  specDigest                String
+  reviewSubjectDigest       String
+  status                    String     @default("draft")
+  engine                    String     @default("mastra")
+  stateVersion              Int        @default(0)
+  resolvedBindingsJson      String     @default("{}")
+  missingBindingsJson       String     @default("[]")
+  reviewStatus              String     @default("not_requested")
+  reviewedSubjectDigest     String?
+  assignedReviewerId        Int?
+  reviewedByUserId          Int?
+  reviewedAt                DateTime?
+  publishedByUserId         Int?
+  publishedAt               DateTime?
+  createdByUserId           Int?
+  createdAt                 DateTime   @default(now())
+  updatedAt                 DateTime   @updatedAt
+  runs                      runs[]
+
+  @@unique([workspaceId, lineageKey, revision])
+  @@index([workspaceId, status])
+  @@index([workspaceId, lineageKey])
+  @@map("fde_workflow_drafts")
+}
+
+model fde_authoring_sessions {
+  id              String     @id @default(uuid())
+  workspaceId     Int
+  workspace       workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  fdeSessionId    String     @unique
+  fdeFromTurnId   String?
+  fdeToTurnId     String?
+  createdByUserId Int?
+
+  @@index([workspaceId])
+  @@map("fde_authoring_sessions")
+}
+
+model fde_run_checkpoints {
+  id             String   @id @default(uuid())
+  runId          String   @unique
+  run            runs     @relation(fields: [runId], references: [id], onDelete: Cascade)
+  nodeCursor     String
+  nodeOutputs    String   @default("{}")
+  pendingAction  String?
+  inputDigest    String
+  attemptToken   String   @unique
+  status         String   @default("idle")
+  leaseOwner     String?
+  leaseExpiresAt DateTime?
+  stateVersion   Int      @default(0)
+  updatedAt      DateTime @updatedAt
+
+  @@map("fde_run_checkpoints")
+}
+
+model run_artifacts {
+  id           String   @id @default(uuid())
+  runId        String
+  run          runs     @relation(fields: [runId], references: [id], onDelete: Cascade)
+  artifactType String // "browser_snapshot"|"browser_screenshot"|"browser_log"|"download_file"|"image_output"
+  label        String?
+  storageRef   String
+  mimeType     String?
+  sizeBytes    Int?
+  metadata     String   @default("{}") // JSON string
+  createdAt    DateTime @default(now())
+
+  @@index([runId])
+  @@map("run_artifacts")
+}
+
+model run_events {
+  id        String   @id @default(uuid())
+  runId     String
+  run       runs     @relation(fields: [runId], references: [id], onDelete: Cascade)
+  seq       Int
+  type      String
+  payload   String   @default("{}")
+  createdAt DateTime @default(now())
+
+  @@unique([runId, seq])
+  @@index([runId, createdAt])
+  @@map("run_events")
+}
+
+model agent_trajectories {
+  id            String     @id @default(uuid())
+  workspaceId   Int
+  workspace     workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId        Int?
+  user          users?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scopeKey      String
+  runId         String?
+  agentKind     String     @default("orchestration")
+  goal          String
+  planShapeJson String
+  outcome       String
+  successScore  Float
+  tokenCost     Int        @default(0)
+  durationMs    Int        @default(0)
+  provider      String?
+  model         String?
+  tier          String?
+  createdAt     DateTime   @default(now())
+
+  @@index([scopeKey, successScore])
+  @@map("agent_trajectories")
+}
+
+model coding_agent_runs {
+  id             String    @id @default(uuid())
+  userId         Int?
+  workspaceId    Int?
+  sourceRepoPath String
+  sandboxPath    String?
+  status         String    @default("pending")
+  provider       String    @default("fake")
+  model          String?
+  maxTurns       Int       @default(20)
+  totalTurns     Int       @default(0)
+  totalCostUsd   Float     @default(0)
+  errorCode      String?
+  errorDetail    String?
+  appliedAt      DateTime?
+  metadata       String    @default("{}")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  completedAt    DateTime?
+
+  artifacts coding_agent_artifacts[]
+  events    coding_agent_events[]
+
+  @@index([status, createdAt])
+  @@index([sourceRepoPath])
+  @@index([sandboxPath])
+  @@map("coding_agent_runs")
+}
+
+model coding_agent_events {
+  id        String            @id @default(uuid())
+  runId     String
+  run       coding_agent_runs @relation(fields: [runId], references: [id], onDelete: Cascade)
+  seq       Int
+  type      String
+  payload   String            @default("{}")
+  createdAt DateTime          @default(now())
+
+  @@unique([runId, seq])
+  @@index([runId, createdAt])
+  @@map("coding_agent_events")
+}
+
+model coding_agent_artifacts {
+  id           String            @id @default(uuid())
+  runId        String
+  run          coding_agent_runs @relation(fields: [runId], references: [id], onDelete: Cascade)
+  artifactType String
+  label        String?
+  storageRef   String
+  mimeType     String?
+  sizeBytes    Int?
+  metadata     String            @default("{}")
+  createdAt    DateTime          @default(now())
+
+  @@index([runId])
+  @@map("coding_agent_artifacts")
+}

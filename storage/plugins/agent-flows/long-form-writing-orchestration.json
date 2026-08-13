@@ -1,0 +1,56 @@
+{
+  "name": "长文写作助手流程",
+  "description": "多 Agent 协作完成长文写作任务：大纲师规划结构 → 撰写员创作内容 → 编辑员润色优化",
+  "steps": [
+    {
+      "type": "start",
+      "config": {
+        "message": "开始长文写作流程"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "outliner-flow",
+        "roleName": "outliner",
+        "roleDescription": "负责分析主题、规划文章结构、制定大纲",
+        "inputMapping": {
+          "topic": "user_query"
+        },
+        "outputKey": "outline",
+        "timeout": 300,
+        "onError": "fail"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "content-writer-flow",
+        "roleName": "writer",
+        "roleDescription": "负责根据大纲创作内容、展开论述、丰富细节",
+        "inputMapping": {
+          "outline": "outline",
+          "topic": "user_query"
+        },
+        "outputKey": "draft_content",
+        "timeout": 600,
+        "onError": "fail"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "editor-flow",
+        "roleName": "editor",
+        "roleDescription": "负责润色文字、优化表达、检查逻辑和语法",
+        "inputMapping": {
+          "draft_content": "draft_content",
+          "outline": "outline"
+        },
+        "outputKey": "final_content",
+        "timeout": 300,
+        "onError": "fail"
+      }
+    }
+  ]
+}

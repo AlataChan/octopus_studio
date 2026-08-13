@@ -1,0 +1,62 @@
+services:
+  alata:
+    image: alata-studio:latest
+    ports:
+      - "3001:3001"
+    volumes:
+      - alata-data:/app/server/storage
+    environment:
+      - SERVER_PORT=3001
+
+  im-gateway:
+    build: .
+    ports:
+      - "3100:3100"
+    depends_on:
+      - alata
+    env_file:
+      - .env
+    environment:
+      ALATA_BASE_URL: http://alata:3001/api
+      GATEWAY_CONFIG_MODE: ${GATEWAY_CONFIG_MODE:-standalone}
+      GATEWAY_DATA_DIR: /app/data
+      # Long-connection mode (recommended for customer Docker self-hosting without reverse proxy)
+      # FEISHU_DELIVERY_MODE: longconn
+      # FEISHU_APP_ID: cli_xxx
+      # FEISHU_APP_SECRET: xxx
+      # FEISHU_LONGCONN_LOG_LEVEL: info
+      # FEISHU_LONGCONN_AUTO_RECONNECT: 'true'
+      # FEISHU_LONGCONN_READY_TIMEOUT_MS: 15000
+    volumes:
+      - gateway-data:/app/data
+    restart: unless-stopped
+
+  # Optional profile: docker compose --profile longconn up alata im-gateway-longconn
+  im-gateway-longconn:
+    profiles:
+      - longconn
+    build: .
+    ports:
+      - "3101:3100"
+    depends_on:
+      - alata
+    env_file:
+      - .env
+    environment:
+      ALATA_BASE_URL: http://alata:3001/api
+      GATEWAY_CONFIG_MODE: ${GATEWAY_CONFIG_MODE:-standalone}
+      GATEWAY_DATA_DIR: /app/data
+      FEISHU_DELIVERY_MODE: longconn
+      FEISHU_APP_ID: "${FEISHU_APP_ID:-}"
+      FEISHU_APP_SECRET: "${FEISHU_APP_SECRET:-}"
+      FEISHU_LONGCONN_LOG_LEVEL: ${FEISHU_LONGCONN_LOG_LEVEL:-info}
+      FEISHU_LONGCONN_AUTO_RECONNECT: "${FEISHU_LONGCONN_AUTO_RECONNECT:-true}"
+      FEISHU_LONGCONN_READY_TIMEOUT_MS: "${FEISHU_LONGCONN_READY_TIMEOUT_MS:-15000}"
+    volumes:
+      - gateway-longconn-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  alata-data:
+  gateway-data:
+  gateway-longconn-data:

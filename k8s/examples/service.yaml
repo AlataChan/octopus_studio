@@ -1,0 +1,148 @@
+# Alata Studio Service
+# 用途：暴露 Alata Studio 服务
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: alata-studio-service
+  namespace: alata-studio
+  labels:
+    app: alata-studio
+    component: main
+spec:
+  type: ClusterIP  # 集群内部访问，如需外部访问改为 LoadBalancer 或 NodePort
+  
+  selector:
+    app: alata-studio
+    component: main
+  
+  ports:
+  - name: http
+    port: 3001
+    targetPort: 3001
+    protocol: TCP
+  
+  sessionAffinity: ClientIP  # 会话保持，确保同一用户请求到同一 Pod
+
+---
+# Ollama Service
+# 用途：暴露 Ollama API 服务
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: alata-studio
+  labels:
+    app: ollama
+    component: llm
+spec:
+  type: ClusterIP
+  
+  selector:
+    app: ollama
+    component: llm
+  
+  ports:
+  - name: api
+    port: 11434
+    targetPort: 11434
+    protocol: TCP
+
+---
+# 可选：NodePort Service（用于外部访问）
+# 取消注释以启用
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: alata-studio-nodeport
+#   namespace: alata-studio
+#   labels:
+#     app: alata-studio
+#     component: main
+# spec:
+#   type: NodePort
+#   
+#   selector:
+#     app: alata-studio
+#     component: main
+#   
+#   ports:
+#   - name: http
+#     port: 3001
+#     targetPort: 3001
+#     nodePort: 30001  # 外部访问端口（30000-32767）
+#     protocol: TCP
+
+---
+# 可选：LoadBalancer Service（云环境）
+# 取消注释以启用
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: alata-studio-lb
+#   namespace: alata-studio
+#   labels:
+#     app: alata-studio
+#     component: main
+#   annotations:
+#     # 云厂商特定注解
+#     # AWS: service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+#     # Azure: service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+#     # GCP: cloud.google.com/load-balancer-type: "Internal"
+# spec:
+#   type: LoadBalancer
+#   
+#   selector:
+#     app: alata-studio
+#     component: main
+#   
+#   ports:
+#   - name: http
+#     port: 80
+#     targetPort: 3001
+#     protocol: TCP
+
+---
+# 使用说明：
+# 
+# 1. 应用配置：
+#    kubectl apply -f service.yaml
+# 
+# 2. 查看服务：
+#    kubectl get svc -n alata-studio
+# 
+# 3. 查看服务详情：
+#    kubectl describe svc alata-studio-service -n alata-studio
+# 
+# 4. 端口转发（本地访问）：
+#    kubectl port-forward svc/alata-studio-service 3001:3001 -n alata-studio
+#    访问: http://localhost:3001
+# 
+# 5. 测试连接：
+#    kubectl run -it --rm debug --image=curlimages/curl --restart=Never -n alata-studio -- \
+#      curl http://alata-studio-service:3001/api/ping
+# 
+# 服务类型说明：
+# 
+# - ClusterIP（默认）：
+#   仅集群内部访问
+#   适用场景：通过 Ingress 暴露服务
+# 
+# - NodePort：
+#   通过节点 IP + NodePort 访问
+#   适用场景：开发/测试环境
+#   访问方式：http://<node-ip>:30001
+# 
+# - LoadBalancer：
+#   云厂商提供的负载均衡器
+#   适用场景：生产环境（云环境）
+#   自动分配外部 IP
+# 
+# 注意事项：
+# - 生产环境建议使用 Ingress + ClusterIP
+# - NodePort 端口范围：30000-32767
+# - LoadBalancer 可能产生额外费用
+

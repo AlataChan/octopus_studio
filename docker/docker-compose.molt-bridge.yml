@@ -1,0 +1,14 @@
+# Override for connecting an existing isolated SGA-Molt deployment to Alata.
+# Usage:
+#   docker compose -f docker/docker-compose.lite.yml -f docker/docker-compose.molt-bridge.yml up -d
+
+services:
+  alata-server:
+    environment:
+      MOLT_ENABLED: ${MOLT_ENABLED:-true}
+      MOLT_BASE_URL: ${MOLT_BASE_URL:-http://host.docker.internal:18889}
+      MOLT_TOKEN_FILE: ${MOLT_TOKEN_FILE:-/run/molt/gateway.token}
+    volumes:
+      - /tmp/sga-molt-openclaw-docker/gateway.token:/run/molt/gateway.token:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

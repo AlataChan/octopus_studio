@@ -1,0 +1,8 @@
+[allowlist]
+description = "Deterministic tests, redacted evidence, and placeholder documentation"
+paths = [
+  '''^TROUBLESHOOTING\.md$''',
+  '''^docs/evidence/audit-sample\.json$''',
+  '''^server/__tests__/''',
+  '''^server/utils/vectorDbProviders/pinecone/PINECONE_SETUP\.md$''',
+]

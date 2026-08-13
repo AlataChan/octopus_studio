@@ -1,0 +1,98 @@
+{
+  "name": "报告生成助手流程",
+  "description": "多 Agent 协作完成报告生成：需求澄清 → RAG 检索 → 大纲规划 → 分节写作 → 引用整理",
+  "active": true,
+  "steps": [
+    {
+      "type": "start",
+      "config": {
+        "message": "开始报告生成流程",
+        "variables": [
+          { "name": "topic", "value": "" },
+          { "name": "requirements", "value": "" },
+          { "name": "research_data", "value": "" },
+          { "name": "outline", "value": "" },
+          { "name": "sections", "value": "" },
+          { "name": "citations", "value": "" }
+        ]
+      }
+    },
+    {
+      "type": "llmInstruction",
+      "config": {
+        "label": "需求澄清",
+        "roleName": "clarifier",
+        "roleDescription": "负责理解用户需求，明确报告主题、范围和格式要求",
+        "instruction": "分析用户的报告需求，提取以下信息：\n1. 报告主题和核心问题\n2. 目标受众\n3. 期望的报告结构（如：摘要、背景、分析、结论）\n4. 特殊格式要求\n\n用户需求：{{user_query}}\n\n请以 JSON 格式输出分析结果。",
+        "outputKey": "requirements",
+        "model": "default"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "rag-retrieval-flow",
+        "label": "知识检索",
+        "roleName": "researcher",
+        "roleDescription": "负责从知识库中检索与报告主题相关的资料",
+        "inputMapping": {
+          "query": "user_query",
+          "requirements": "requirements"
+        },
+        "outputKey": "research_data",
+        "timeout": 300,
+        "onError": "continue"
+      }
+    },
+    {
+      "type": "llmInstruction",
+      "config": {
+        "label": "大纲规划",
+        "roleName": "outliner",
+        "roleDescription": "负责根据需求和检索资料规划报告大纲",
+        "instruction": "根据以下信息规划报告大纲：\n\n需求分析：{{requirements}}\n检索资料：{{research_data}}\n\n请生成一个结构清晰的报告大纲，包含：\n1. 各章节标题\n2. 每章节的要点\n3. 预计引用的资料来源\n\n以 JSON 格式输出，格式如下：\n{\n  \"title\": \"报告标题\",\n  \"sections\": [\n    { \"title\": \"章节标题\", \"points\": [\"要点1\", \"要点2\"], \"sources\": [\"来源1\"] }\n  ]\n}",
+        "outputKey": "outline",
+        "model": "default"
+      }
+    },
+    {
+      "type": "llmInstruction",
+      "config": {
+        "label": "分节写作",
+        "roleName": "writer",
+        "roleDescription": "负责根据大纲逐节撰写报告内容",
+        "instruction": "根据以下大纲和资料撰写报告内容：\n\n大纲：{{outline}}\n检索资料：{{research_data}}\n\n要求：\n1. 按大纲结构逐节撰写\n2. 内容要有理有据，引用资料时标注来源\n3. 语言专业、逻辑清晰\n4. 每个引用使用 [来源X] 格式标注\n\n请输出完整的报告正文。",
+        "outputKey": "sections",
+        "model": "default"
+      }
+    },
+    {
+      "type": "llmInstruction",
+      "config": {
+        "label": "引用整理",
+        "roleName": "editor",
+        "roleDescription": "负责整理报告中的引用，生成参考来源章节",
+        "instruction": "根据报告内容和检索资料，整理参考来源章节：\n\n报告内容：{{sections}}\n检索资料：{{research_data}}\n\n请生成规范的参考来源列表，格式如下：\n\n## 参考来源\n\n[来源1] 文档标题 - 来源路径/URL\n[来源2] 文档标题 - 来源路径/URL\n...\n\n确保每个在报告中引用的来源都有对应条目。",
+        "outputKey": "citations",
+        "model": "default"
+      }
+    },
+    {
+      "type": "finish",
+      "config": {
+        "outputTemplate": "{{sections}}\n\n---\n\n{{citations}}",
+        "metadata": {
+          "type": "report",
+          "hasReferences": true
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "category": "报告生成",
+    "tags": ["报告", "文档", "RAG", "引用"],
+    "version": "1.0.0",
+    "author": "Alata Studio"
+  }
+}
+

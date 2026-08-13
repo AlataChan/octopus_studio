@@ -1,0 +1,113 @@
+import { useEffect, useState } from "react";
+import Sidebar from "@/components/SettingsSidebar";
+import { isMobile } from "react-device-detect";
+import * as Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { EnvelopeSimple } from "@phosphor-icons/react";
+import Admin from "@/models/admin";
+import InviteRow from "./InviteRow";
+import NewInviteModal from "./NewInviteModal";
+import { useModal } from "@/hooks/useModal";
+import ModalWrapper from "@/components/ModalWrapper";
+import CTAButton from "@/components/lib/CTAButton";
+import { useTranslation } from "react-i18next";
+
+export default function AdminInvites() {
+  const { t } = useTranslation();
+  const { isOpen, openModal, closeModal } = useModal();
+  const [loading, setLoading] = useState(true);
+  const [invites, setInvites] = useState([]);
+
+  const fetchInvites = async () => {
+    const _invites = await Admin.invites();
+    setInvites(_invites);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchInvites();
+  }, []);
+
+  return (
+    <div className="w-screen h-screen overflow-hidden bg-page-texture flex">
+      <Sidebar />
+      <div
+        style={{ height: isMobile ? "100%" : "calc(100% - 32px)" }}
+        className="relative z-[1] md:ml-[2px] md:mr-[16px] md:my-[16px] md:rounded-[16px] bg-theme-bg-secondary w-full h-full overflow-y-scroll p-4 md:p-0"
+      >
+        <div className="flex flex-col w-full px-1 md:pl-6 md:pr-[50px] md:py-6 py-16">
+          <div className="w-full flex flex-col gap-y-1 pb-6 border-theme-border border-b-2">
+            <div className="items-center flex gap-x-4">
+              <p className="text-lg leading-6 font-bold text-theme-text-primary">
+                {t("admin-invites.title")}
+              </p>
+            </div>
+            <p className="text-xs leading-[18px] font-base text-theme-text-secondary mt-2">
+              {t("admin-invites.description")}
+            </p>
+          </div>
+          <div className="w-full justify-end flex">
+            <CTAButton
+              onClick={openModal}
+              className="mt-3 mr-0 mb-4 md:-mb-12 z-10"
+            >
+              <EnvelopeSimple className="h-4 w-4" weight="bold" />{" "}
+              {t("admin-invites.create-invite")}
+            </CTAButton>
+          </div>
+          <div className="overflow-x-auto mt-6">
+            {loading ? (
+              <Skeleton.default
+                height="80vh"
+                width="100%"
+                highlightColor="var(--theme-bg-primary)"
+                baseColor="var(--theme-bg-secondary)"
+                count={1}
+                className="w-full p-4 rounded-b-2xl rounded-tr-2xl rounded-tl-sm"
+                containerClassName="flex w-full"
+              />
+            ) : (
+              <table className="w-full text-xs text-left rounded-lg min-w-[640px] border-spacing-0">
+                <thead className="text-theme-text-secondary text-xs leading-[18px] font-bold uppercase border-theme-border border-b">
+                  <tr>
+                    <th scope="col" className="px-6 py-3 rounded-tl-lg">
+                      {t("admin-invites.table.status")}
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      {t("admin-invites.table.accepted-by")}
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      {t("admin-invites.table.created-by")}
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      {t("admin-invites.table.created")}
+                    </th>
+                    <th scope="col" className="px-6 py-3 rounded-tr-lg">
+                      {" "}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {invites.length === 0 ? (
+                    <tr className="bg-transparent text-theme-text-secondary text-sm font-medium">
+                      <td colSpan="5" className="px-6 py-4 text-center">
+                        {t("admin-invites.no-invites")}
+                      </td>
+                    </tr>
+                  ) : (
+                    invites.map((invite) => (
+                      <InviteRow key={invite.id} invite={invite} />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+        <ModalWrapper isOpen={isOpen}>
+          <NewInviteModal closeModal={closeModal} onSuccess={fetchInvites} />
+        </ModalWrapper>
+      </div>
+    </div>
+  );
+}

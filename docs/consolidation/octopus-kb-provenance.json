@@ -1,0 +1,990 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-09",
+  "authority": "studio",
+  "source": {
+    "repository": "octopus-kb",
+    "commit": "d4852698caedbb37f4c370bc339da22a38db1367",
+    "roleAfterAbsorption": "read-only archival input"
+  },
+  "files": {
+    "server/integrations/octopus-kb/LICENSE": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9",
+        "1b0cd9f3b9b4cc83c19a5d9e83deb958bfe60568",
+        "27c58541bd555b8b9791ed6e2d8d7bdb252230ca"
+      ]
+    },
+    "server/integrations/octopus-kb/NOTICE": {
+      "origin": "studio-absorption-notice",
+      "license": "MIT",
+      "studioCommits": []
+    },
+    "server/integrations/octopus-kb/schemas/README.md": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/cli/impacted-pages.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/cli/lint.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/cli/lookup.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/cli/neighbors.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/cli/retrieve-bundle.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/config/v1.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/eval/tasks-v1.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/llm/proposal.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/page-meta.json": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/schemas/rules/v1.json": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/_schemas/page-meta.json": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/base.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/obsidian/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/obsidian/codec.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/obsidian/lint_obsidian.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/obsidian/paths.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/adapters/obsidian/store.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/apply.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/audit.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/canonical.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ckr/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ckr/json_codec.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ckr/lint.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ckr/models.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ckr/operations.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/cli.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/config.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/drift.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/paths.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/runner.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/scoring.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/eval/tasks.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/export.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/frontmatter.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/impact.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/inbox.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/ingest.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/links.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/lint.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/llm.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/lookup.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/migrate.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/models.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/neighbors.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/page_types.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/planner.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/profile.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/proposals.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/propose.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/retrieve.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/schema.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/summary.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/validators/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/validators/builtins.yaml": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/validators/declarative.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_compound/vault.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_mcp/__init__.py": {
+      "origin": "studio-integration",
+      "license": "MIT",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_mcp/cli.py": {
+      "origin": "studio-integration",
+      "license": "MIT",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_mcp/server.py": {
+      "origin": "studio-integration",
+      "license": "MIT",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_mcp/tests/test_tools.py": {
+      "origin": "studio-integration",
+      "license": "MIT",
+      "studioCommits": [
+        "3cd28f1480134061ab1e7565cecd14bb10b2793a",
+        "1b65b3a3f09dc407a1fdcc770b07ee7b4db6e371",
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "d5dc141960c83a4003db68ea9002eb1288bde897",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/src/octopus_kb_mcp/tools.py": {
+      "origin": "studio-integration",
+      "license": "MIT",
+      "studioCommits": [
+        "3cd28f1480134061ab1e7565cecd14bb10b2793a",
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "d5dc141960c83a4003db68ea9002eb1288bde897",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/integration/__init__.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/integration/test_ckr_round_trip.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/integration/test_propose_to_audit_loop.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_adapter_boundaries.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_apply.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_architecture_docs.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_bootstrap_script.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_ckr_models.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_ckr_operations.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_cli.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_config.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_corpus.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_paths.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_runner.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_scoring.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_suite_coverage.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_eval_tasks.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_export.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_frontmatter.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_hook_script.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_impact.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_inbox.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_ingest.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_links.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_lint.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_llm.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_lookup.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_migrate.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_neighbors.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_obsidian_codec.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_obsidian_store.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_page_meta_schema.py": {
+      "origin": "studio-divergence-from-octopus-kb",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_planner.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_profile.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_project_rename.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_prompt_assets.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_proposals.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_propose.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_retrieve.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_schema_module.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_skill_assets.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_validators.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/integrations/octopus-kb/tests/test_vault.py": {
+      "origin": "octopus-kb-commit",
+      "license": "MIT",
+      "sourceCommit": "d4852698caedbb37f4c370bc339da22a38db1367",
+      "studioCommits": [
+        "0f51782de40be22e412a3e7cdc1a8ca7aa8017d9"
+      ]
+    },
+    "server/utils/octopusKb/KbClient.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "6227591e016e8cae09ec0340025ce0cc08c73ad6",
+        "d5dc141960c83a4003db68ea9002eb1288bde897",
+        "9921113be1f93707da49bb9cafc6b1f3a3758242"
+      ]
+    },
+    "server/utils/octopusKb/audit.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "6227591e016e8cae09ec0340025ce0cc08c73ad6"
+      ]
+    },
+    "server/utils/octopusKb/memoryScore.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "bce37540a4fd77118db9067a93726f1847d8f421"
+      ]
+    },
+    "server/utils/octopusKb/memoryWriter.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "e8b2e8684f229ac9b9f19bf7f655fdc4740f7228",
+        "1b65b3a3f09dc407a1fdcc770b07ee7b4db6e371"
+      ]
+    },
+    "server/utils/octopusKb/registerMcp.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "ce09b1c72660b789104e7e52f386a0334a4d1c6c"
+      ]
+    },
+    "server/utils/octopusKb/retention.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "e8b2e8684f229ac9b9f19bf7f655fdc4740f7228",
+        "1b65b3a3f09dc407a1fdcc770b07ee7b4db6e371"
+      ]
+    },
+    "server/utils/octopusKb/retrievalMerge.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "bce37540a4fd77118db9067a93726f1847d8f421",
+        "f20a6c8c20386863ec7ee519b7dbb47aecea205d"
+      ]
+    },
+    "server/utils/octopusKb/scrub.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "1b65b3a3f09dc407a1fdcc770b07ee7b4db6e371"
+      ]
+    },
+    "server/utils/octopusKb/settings.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "1b65b3a3f09dc407a1fdcc770b07ee7b4db6e371",
+        "6227591e016e8cae09ec0340025ce0cc08c73ad6",
+        "9921113be1f93707da49bb9cafc6b1f3a3758242"
+      ]
+    },
+    "server/utils/octopusKb/transform.js": {
+      "origin": "studio-native-adapter",
+      "license": "MIT",
+      "studioCommits": [
+        "ef264435fc004594fda16c708330f52ea50d954d",
+        "6c88294caf9235ddead871bcef0bb15af6bfcccc"
+      ]
+    }
+  }
+}

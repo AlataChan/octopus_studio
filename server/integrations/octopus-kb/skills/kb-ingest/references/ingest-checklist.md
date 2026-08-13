@@ -1,0 +1,7 @@
+- Confirm the source is a public `http/https` URL.
+- Reject localhost, loopback, and private-network targets.
+- Fetch markdown through the ingest path without adding non-standard dependencies.
+- Write the new file under `raw/` only.
+- Ensure frontmatter includes `title`, `type`, `lang`, `role`, `layer`, `tags`, `summary`, and provenance fields.
+- Do not overwrite an existing raw file; use a numeric suffix when needed.
+- After ingest succeeds, run `kb-maintain` if the wiki should reflect the new source.

@@ -1,0 +1,22 @@
+# PaddleOCR 3.x 依赖
+# 安装方式: pip install -r requirements.txt
+
+# PaddlePaddle（PaddleOCR 的基础框架）
+paddlepaddle>=2.6.0
+
+# PaddleOCR 3.x（推荐 >=3.0.0）
+paddleocr>=3.0.0
+
+# FastAPI 框架
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# 文件上传支持
+python-multipart>=0.0.6
+
+# 图像处理
+Pillow>=10.0.0
+
+# 可选：用于更好的性能
+# numpy>=1.24.0
+

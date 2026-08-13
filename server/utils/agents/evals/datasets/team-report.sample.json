@@ -1,0 +1,44 @@
+[
+  {
+    "id": "team-report-001",
+    "tags": ["smoke", "team-report"],
+    "input": "Write a brief team progress report for the week.",
+    "output": "Team Progress Report — Week of 2026-01-01\n\nSummary: The team completed three key deliverables this week.\n\n1. Feature A was shipped to production.\n2. Bug fixes reduced error rate by 30%.\n3. Documentation was updated for the new API.\n\nNext steps: Continue work on Feature B and prepare for the Q1 review.",
+    "expected": {
+      "mustContain": ["summary", "deliverables"],
+      "shouldContain": ["team", "week", "report"],
+      "mustNotContain": ["INTERNAL_ONLY", "confidential"],
+      "minLength": 100,
+      "maxLength": 2000
+    },
+    "thresholds": {}
+  },
+  {
+    "id": "team-report-002",
+    "tags": ["smoke", "team-report", "minimal"],
+    "input": "Generate a one-sentence team status update.",
+    "output": "The team made significant progress this sprint, completing the authentication module and beginning integration testing.",
+    "expected": {
+      "mustContain": ["team"],
+      "shouldContain": ["progress", "sprint"],
+      "mustNotContain": ["error", "failure", "blocked"],
+      "minLength": 50,
+      "maxLength": 300
+    },
+    "thresholds": {}
+  },
+  {
+    "id": "team-report-003",
+    "tags": ["smoke", "team-report", "structured"],
+    "input": "Summarize the sprint retrospective findings.",
+    "output": "Sprint Retrospective Summary\n\nWhat went well:\n- Clear communication between team members\n- Early detection of a critical bug in the payment flow\n\nWhat to improve:\n- Better estimation for complex tasks\n- More frequent check-ins on blockers\n\nAction items:\n- Schedule daily 15-minute standups\n- Add complexity points to planning poker",
+    "expected": {
+      "mustContain": ["summary", "action"],
+      "shouldContain": ["sprint", "team", "improve"],
+      "mustNotContain": ["proprietary", "PRIVATE"],
+      "minLength": 150,
+      "maxLength": 3000
+    },
+    "thresholds": {}
+  }
+]

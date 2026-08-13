@@ -1,0 +1,31 @@
+{
+  "wave": 1,
+  "description": "Wave 1 curated release: 25 high-value agents. File names verified against upstream on 2026-04-07.",
+  "files": [
+    "engineering/engineering-backend-architect.md",
+    "engineering/engineering-frontend-developer.md",
+    "engineering/engineering-code-reviewer.md",
+    "engineering/engineering-devops-automator.md",
+    "engineering/engineering-rapid-prototyper.md",
+    "engineering/engineering-database-optimizer.md",
+    "engineering/engineering-git-workflow-master.md",
+    "marketing/marketing-content-creator.md",
+    "marketing/marketing-douyin-strategist.md",
+    "marketing/marketing-xiaohongshu-specialist.md",
+    "marketing/marketing-wechat-official-account.md",
+    "marketing/marketing-seo-specialist.md",
+    "marketing/marketing-growth-hacker.md",
+    "product/product-manager.md",
+    "product/product-trend-researcher.md",
+    "product/product-feedback-synthesizer.md",
+    "design/design-ui-designer.md",
+    "design/design-brand-guardian.md",
+    "sales/sales-coach.md",
+    "sales/sales-account-strategist.md",
+    "support/support-support-responder.md",
+    "support/support-analytics-reporter.md",
+    "specialized/agents-orchestrator.md",
+    "specialized/specialized-workflow-architect.md",
+    "project-management/project-management-project-shepherd.md"
+  ]
+}

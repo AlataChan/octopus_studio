@@ -1,0 +1,85 @@
+name: Run release checks
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "server/**"
+      - "frontend/**"
+      - "collector/**"
+      - "alata-im-gateway/**"
+      - "cli/alata/**"
+      - "embed/**"
+      - "browser-extension/**"
+      - "electron/**"
+      - "electron-builder.config.cjs"
+      - "scripts/electron/**"
+      - "package.json"
+      - "yarn.lock"
+      - ".github/workflows/run-tests.yaml"
+  push:
+    branches: [main]
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "yarn"
+
+      - name: Check production TODO allowlist
+        run: node scripts/check-todo-allowlist.js --strict
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Setup environment and Prisma
+        run: yarn setup:envs && yarn prisma:setup
+
+      - name: Run server tests
+        run: yarn workspace anything-llm-server test
+
+      - name: Run collector tests
+        run: yarn workspace anything-llm-document-collector test
+
+      - name: Run frontend tests
+        run: yarn workspace anything-llm-frontend test
+
+      - name: Build frontend
+        run: yarn workspace anything-llm-frontend build
+
+      - name: Run gateway tests
+        run: yarn test:gateway
+
+      - name: Run CLI tests
+        run: yarn test:cli
+
+      - name: Build embed widget
+        run: yarn build:embed
+
+      - name: Build browser extension
+        run: yarn build:extension
+
+      - name: Check Electron release verifier scripts
+        run: |
+          node --check scripts/electron/stage-sidecars.mjs
+          node --check scripts/electron/verify-bundle.mjs
+          node --check scripts/electron/stagingExclude.mjs
+          node --test scripts/electron/__tests__/stagingExclude.test.mjs
+
+      - name: Run Electron security tests
+        run: |
+          yarn jest \
+            --config '{"testEnvironment":"node","testMatch":["**/electron/__tests__/**/*.test.js"],"clearMocks":true,"modulePathIgnorePatterns":["<rootDir>/.electron-build","<rootDir>/dist-electron"]}' \
+            --runInBand

@@ -1,0 +1,19 @@
+* text=auto eol=lf
+*.icns binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tgz binary
+*.wasm binary
+*.traineddata binary
+*.db binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.webm binary

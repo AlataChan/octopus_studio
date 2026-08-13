@@ -1,0 +1,221 @@
+{
+  "providers": {
+    "volcengine_ark": {
+      "display_name": "Volcengine Ark",
+      "env_key": "ARK_API_KEY",
+      "submit_url": "https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks",
+      "poll_url": "https://ark.cn-beijing.volces.com/api/v3/contents/generations/tasks/{task_id}"
+    },
+    "aliyun_dashscope": {
+      "display_name": "Alibaba Cloud Model Studio / DashScope",
+      "env_key": "DASHSCOPE_API_KEY",
+      "base_url_env": "DASHSCOPE_BASE_URL",
+      "default_base_url": "https://dashscope.aliyuncs.com/api/v1"
+    },
+    "agnes": {
+      "display_name": "Agnes AI",
+      "env_key": "AGNES_API_KEY",
+      "base_url": "https://apihub.agnes-ai.com"
+    }
+  },
+  "budget": {
+    "usd_cny_rate": 7.2,
+    "confirm_threshold_cny": 1.0,
+    "session_cap_cny": 10.0
+  },
+  "routes": {
+    "image.poster.draft": [
+      "agnes.image_flash",
+      "aliyun.wan2_7.image",
+      "aliyun.qwen_image_2.pro"
+    ],
+    "image.poster.final": [
+      "agnes.image_flash",
+      "aliyun.qwen_image_2.pro",
+      "aliyun.wan2_7.image"
+    ],
+    "image.edit": [
+      "agnes.image_flash",
+      "aliyun.wan2_7.i2v",
+      "aliyun.happyhorse_1_0.video_edit"
+    ],
+    "video.text.draft": [
+      "agnes.video_v2",
+      "volc.seedance_1_0_pro_fast",
+      "aliyun.wan2_7.t2v",
+      "aliyun.happyhorse_1_1.t2v",
+      "volc.seaweed"
+    ],
+    "video.image.draft": [
+      "agnes.video_v2",
+      "aliyun.wan2_7.i2v",
+      "volc.seedance_1_0_lite_i2v"
+    ],
+    "video.final": [
+      "agnes.video_v2",
+      "volc.seedance_2_0_mini",
+      "volc.seedance_1_5_pro",
+      "aliyun.wan2_7.t2v"
+    ],
+    "video.multimodal": [
+      "agnes.video_v2",
+      "volc.seedance_2_0_mini",
+      "aliyun.wan2_7.r2v"
+    ],
+    "video.edit": [
+      "aliyun.wan2_7.videoedit",
+      "aliyun.happyhorse_1_0.video_edit"
+    ]
+  },
+  "models": {
+    "volc.seedance_2_0_mini": {
+      "provider": "volcengine_ark",
+      "model": "doubao-seedance-2-0-mini-260615",
+      "adapter": "ark_content_video",
+      "capabilities": ["video.text", "video.image", "video.multimodal", "audio.reference"],
+      "quality": "final",
+      "pricing": {"price": 0.30, "unit": "second", "currency": "CNY", "verify": true},
+      "notes": "Good default for multi-reference video on Ark content generation tasks."
+    },
+    "volc.seedance_1_5_pro": {
+      "provider": "volcengine_ark",
+      "model": "doubao-seedance-1-5-pro",
+      "adapter": "ark_content_video",
+      "capabilities": ["video.text", "video.image"],
+      "quality": "final",
+      "pricing": {"price": 0.30, "unit": "second", "currency": "CNY", "verify": true}
+    },
+    "volc.seedance_1_0_pro_fast": {
+      "provider": "volcengine_ark",
+      "model": "doubao-seedance-1-0-pro-fast",
+      "adapter": "ark_content_video",
+      "capabilities": ["video.text", "video.image"],
+      "quality": "draft",
+      "pricing": {"price": 0.15, "unit": "second", "currency": "CNY", "verify": true}
+    },
+    "volc.seedance_1_0_lite_i2v": {
+      "provider": "volcengine_ark",
+      "model": "doubao-seedance-1-0-lite-i2v",
+      "adapter": "ark_content_video",
+      "capabilities": ["video.image"],
+      "quality": "draft",
+      "pricing": {"price": 0.15, "unit": "second", "currency": "CNY", "verify": true}
+    },
+    "volc.seaweed": {
+      "provider": "volcengine_ark",
+      "model": "doubao-video-generation-seaweed",
+      "adapter": "ark_content_video",
+      "capabilities": ["video.text", "video.image"],
+      "quality": "draft",
+      "pricing": {"price": 0.15, "unit": "second", "currency": "CNY", "verify": true}
+    },
+    "aliyun.qwen_image_2.pro": {
+      "provider": "aliyun_dashscope",
+      "model": "qwen-image-2.0-pro-2026-05-26",
+      "adapter": "dashscope_image",
+      "capabilities": ["image.text"],
+      "quality": "final",
+      "pricing": {"price": 0.20, "unit": "image", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/multimodal-generation/generation"
+    },
+    "aliyun.wan2_7.image": {
+      "provider": "aliyun_dashscope",
+      "model": "wan2.7-image-pro",
+      "adapter": "dashscope_image",
+      "capabilities": ["image.text"],
+      "quality": "final",
+      "pricing": {"price": 0.20, "unit": "image", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/text2image/image-synthesis"
+    },
+    "aliyun.wan2_7.t2v": {
+      "provider": "aliyun_dashscope",
+      "model": "wan2.7-t2v",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.text"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.wan2_7.i2v": {
+      "provider": "aliyun_dashscope",
+      "model": "wan2.7-i2v-2026-04-25",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.image"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.wan2_7.r2v": {
+      "provider": "aliyun_dashscope",
+      "model": "wan2.7-r2v",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.reference"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.wan2_7.videoedit": {
+      "provider": "aliyun_dashscope",
+      "model": "wan2.7-videoedit",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.edit"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.happyhorse_1_1.t2v": {
+      "provider": "aliyun_dashscope",
+      "model": "happyhorse-1.1-t2v",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.text"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.happyhorse_1_1.i2v": {
+      "provider": "aliyun_dashscope",
+      "model": "happyhorse-1.1-i2v",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.image"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.happyhorse_1_1.r2v": {
+      "provider": "aliyun_dashscope",
+      "model": "happyhorse-1.1-r2v",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.reference"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "aliyun.happyhorse_1_0.video_edit": {
+      "provider": "aliyun_dashscope",
+      "model": "happyhorse-1.0-video-edit",
+      "adapter": "dashscope_video",
+      "capabilities": ["video.edit"],
+      "quality": "draft",
+      "pricing": {"price": 0.20, "unit": "second", "currency": "CNY", "verify": true},
+      "endpoint": "/services/aigc/video-generation/video-synthesis"
+    },
+    "agnes.video_v2": {
+      "provider": "agnes",
+      "model": "agnes-video-v2.0",
+      "adapter": "agnes_video",
+      "capabilities": ["video.text", "video.image", "video.multimodal", "video.keyframes"],
+      "quality": "final",
+      "pricing": {"price": 0, "unit": "second", "currency": "USD"},
+      "notes": "Free now ($0/sec). Async: poll via video_id; result in remixed_from_video_id."
+    },
+    "agnes.image_flash": {
+      "provider": "agnes",
+      "model": "agnes-image-2.1-flash",
+      "adapter": "agnes_image",
+      "capabilities": ["image.text", "image.image"],
+      "quality": "final",
+      "pricing": {"price": 0, "unit": "image", "currency": "USD"},
+      "notes": "Free now. Synchronous: result URL at data[0].url (response_format=url)."
+    }
+  }
+}

@@ -1,0 +1,8 @@
+Working directory: $FDE_WORKTREE
+Python: 3.12.8
+Command:
+  .venv/bin/python "$STUDIO_WORKTREE/docs/evidence/scripts/benchmark-studio-compile.py" tests/fixtures/studio/v1/ecommerce-faq.ir.json --iterations 1000
+Output:
+  {"iterations": 1000, "max_ms": 1.049708, "mean_ms": 0.104391, "p50_ms": 0.088771, "p95_ms": 0.179791, "python": "3.12.8"}
+
+Interpretation: warm deterministic compile only; parsed IR reused; excludes HTTP, provider, database, and process-start latency.

@@ -1,0 +1,119 @@
+{
+  "scenario": "review",
+  "version": "1.0",
+  "description": "审核类场景 Golden Set 示例（合同审核）",
+  "createdAt": "2025-12-30T00:00:00Z",
+  "itemCount": 5,
+  "items": [
+    {
+      "id": "review-001",
+      "input": "甲方：XX公司 乙方：YY公司 合同期限：2025年1月1日至2025年12月31日 违约金条款：任何一方违约，需支付合同总金额50%的违约金。",
+      "expectedOutput": {
+        "riskItems": [
+          {
+            "type": "违约金过高",
+            "level": "high",
+            "location": "违约金条款",
+            "reason": "违约金比例50%超过行业惯例（通常10%-30%）",
+            "suggestion": "建议将违约金比例调整为20%-30%"
+          }
+        ],
+        "overallRisk": "high",
+        "passReview": false
+      },
+      "category": "合同审核",
+      "tags": ["违约金", "风险条款"],
+      "difficulty": "medium",
+      "metadata": {
+        "expectedRisks": ["违约金过高"],
+        "contractType": "服务合同"
+      }
+    },
+    {
+      "id": "review-002",
+      "input": "保密条款：乙方对甲方提供的所有信息负有永久保密义务，违反保密义务需赔偿全部损失。",
+      "expectedOutput": {
+        "riskItems": [
+          {
+            "type": "保密期限不合理",
+            "level": "medium",
+            "location": "保密条款",
+            "reason": "永久保密义务超出合理范围",
+            "suggestion": "建议设定合理保密期限（如合同终止后3-5年）"
+          }
+        ],
+        "overallRisk": "medium",
+        "passReview": false
+      },
+      "category": "合同审核",
+      "tags": ["保密条款"],
+      "difficulty": "medium",
+      "metadata": {
+        "expectedRisks": ["保密期限不合理"]
+      }
+    },
+    {
+      "id": "review-003",
+      "input": "知识产权条款：本合同执行过程中产生的所有知识产权归甲方所有。",
+      "expectedOutput": {
+        "riskItems": [
+          {
+            "type": "知识产权归属不公平",
+            "level": "high",
+            "location": "知识产权条款",
+            "reason": "所有知识产权归一方所有，对乙方不公平",
+            "suggestion": "建议区分背景知识产权和合作成果，合理分配权属"
+          }
+        ],
+        "overallRisk": "high",
+        "passReview": false
+      },
+      "category": "合同审核",
+      "tags": ["知识产权"],
+      "difficulty": "hard",
+      "metadata": {
+        "expectedRisks": ["知识产权归属不公平"]
+      }
+    },
+    {
+      "id": "review-004",
+      "input": "付款条款：甲方在收到乙方发票后30个工作日内支付款项。乙方开具合规增值税专用发票。",
+      "expectedOutput": {
+        "riskItems": [],
+        "overallRisk": "low",
+        "passReview": true,
+        "comments": "付款条款合理，符合行业惯例"
+      },
+      "category": "合同审核",
+      "tags": ["付款条款"],
+      "difficulty": "easy",
+      "metadata": {
+        "expectedRisks": []
+      }
+    },
+    {
+      "id": "review-005",
+      "input": "争议解决：本合同项下争议由甲方所在地法院管辖。",
+      "expectedOutput": {
+        "riskItems": [
+          {
+            "type": "管辖权条款",
+            "level": "low",
+            "location": "争议解决条款",
+            "reason": "约定甲方所在地管辖，对乙方可能不利",
+            "suggestion": "建议约定被告所在地或合同签订地管辖"
+          }
+        ],
+        "overallRisk": "low",
+        "passReview": true,
+        "comments": "风险较低，可接受"
+      },
+      "category": "合同审核",
+      "tags": ["争议解决"],
+      "difficulty": "easy",
+      "metadata": {
+        "expectedRisks": ["管辖权条款"]
+      }
+    }
+  ]
+}

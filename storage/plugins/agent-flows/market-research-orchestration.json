@@ -1,0 +1,55 @@
+{
+  "name": "市场调研助手流程",
+  "description": "多 Agent 协作完成市场调研任务：研究员收集信息 → 撰写员整理报告 → 审核员优化内容",
+  "steps": [
+    {
+      "type": "start",
+      "config": {
+        "message": "开始市场调研流程"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "researcher-flow",
+        "roleName": "researcher",
+        "roleDescription": "负责收集和整理市场信息、竞品分析、行业趋势",
+        "inputMapping": {
+          "query": "user_query"
+        },
+        "outputKey": "research_data",
+        "timeout": 300,
+        "onError": "fail"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "writer-flow",
+        "roleName": "writer",
+        "roleDescription": "负责根据研究数据撰写结构化的市场调研报告",
+        "inputMapping": {
+          "research_data": "research_data"
+        },
+        "outputKey": "draft_report",
+        "timeout": 300,
+        "onError": "fail"
+      }
+    },
+    {
+      "type": "subflow",
+      "config": {
+        "flowId": "reviewer-flow",
+        "roleName": "reviewer",
+        "roleDescription": "负责审核报告质量、优化表达、确保准确性",
+        "inputMapping": {
+          "draft_report": "draft_report",
+          "research_data": "research_data"
+        },
+        "outputKey": "final_report",
+        "timeout": 300,
+        "onError": "fail"
+      }
+    }
+  ]
+}

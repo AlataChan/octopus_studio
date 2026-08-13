@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Octopus Visual Production</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow" data-i18n="eyebrow">局域网视觉生产控制台</p>
+      <h1 data-i18n="brand_title">Octopus 视觉生产台</h1>
+    </div>
+    <div class="top-actions">
+      <button id="lang-toggle" type="button" class="secondary lang-toggle">EN</button>
+      <div id="system-status" class="status-stack" aria-live="polite"></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel key-panel" aria-labelledby="keys-heading">
+      <div class="panel-heading">
+        <div>
+          <h2 id="keys-heading" data-i18n="keys_heading">API 密钥</h2>
+          <p data-i18n="keys_sub">浏览器密钥会在每次请求时覆盖服务器默认密钥。</p>
+        </div>
+        <div id="key-badges" class="badge-row"></div>
+      </div>
+      <form id="keys-form">
+        <div class="key-grid">
+          <label>
+            <span>ARK_API_KEY</span>
+            <input id="key-ark" type="password" autocomplete="off" spellcheck="false">
+          </label>
+          <label>
+            <span>DASHSCOPE_API_KEY</span>
+            <input id="key-dashscope" type="password" autocomplete="off" spellcheck="false">
+          </label>
+          <label>
+            <span>AGNES_API_KEY</span>
+            <input id="key-agnes" type="password" autocomplete="off" spellcheck="false">
+          </label>
+        </div>
+        <div class="actions">
+          <button id="save-keys" type="button" data-i18n="save_keys">保存到本浏览器</button>
+          <button id="clear-keys" type="button" class="secondary" data-i18n="clear_keys">清除已保存密钥</button>
+        </div>
+      </form>
+    </section>
+
+    <nav class="tabs" aria-label="Workflow tabs">
+      <button id="tab-generate" type="button" class="tab is-active" data-tab="generate" data-i18n="tab_generate">生成</button>
+      <button id="tab-jobs" type="button" class="tab" data-tab="jobs" data-i18n="tab_jobs">我的任务</button>
+      <button id="tab-stitch" type="button" class="tab" data-tab="stitch" data-i18n="tab_stitch">拼接</button>
+    </nav>
+
+    <section id="panel-generate" class="tab-panel is-active" aria-labelledby="tab-generate">
+      <div class="workspace-grid">
+        <form id="generate-form" class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <h2 data-i18n="gen_heading">生成</h2>
+              <p data-i18n="gen_sub">创建图片或视频任务并查看完成进度。</p>
+            </div>
+            <span id="route-badge" class="badge free-badge is-hidden" data-i18n="free_badge">Agnes 免费通道</span>
+          </div>
+
+          <label>
+            <span data-i18n="prompt">提示词</span>
+            <textarea id="prompt" rows="6" required placeholder="描述你想要的画面内容。" data-i18n-placeholder="prompt_ph"></textarea>
+          </label>
+
+          <div class="form-grid">
+            <label>
+              <span data-i18n="task">任务</span>
+              <select id="task-select"></select>
+            </label>
+            <label>
+              <span data-i18n="provider">服务商</span>
+              <select id="provider-select"></select>
+            </label>
+            <label>
+              <span data-i18n="model">模型</span>
+              <select id="model-select"></select>
+            </label>
+            <label>
+              <span data-i18n="ratio">比例</span>
+              <select id="ratio">
+                <option>16:9</option>
+                <option>9:16</option>
+                <option>1:1</option>
+                <option>4:3</option>
+                <option>3:4</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="duration">时长（秒）</span>
+              <input id="duration" type="number" min="1" max="60" step="1" value="5">
+            </label>
+          </div>
+
+          <details>
+            <summary data-i18n="advanced">高级选项</summary>
+            <div class="form-grid advanced-grid">
+              <label>
+                <span data-i18n="size">尺寸</span>
+                <input id="size" type="text" placeholder="1024x768">
+              </label>
+              <label>
+                <span data-i18n="seed">随机种子</span>
+                <input id="seed" type="number" step="1">
+              </label>
+              <label>
+                <span data-i18n="frame_rate">帧率</span>
+                <input id="frame-rate" type="number" min="1" max="60" step="1" placeholder="24">
+              </label>
+              <label class="wide">
+                <span data-i18n="negative_prompt">反向提示词</span>
+                <input id="negative-prompt" type="text">
+              </label>
+              <label class="wide">
+                <span data-i18n="ref_image">参考图片 URL</span>
+                <textarea id="image-urls" rows="2" placeholder="每行一个 URL" data-i18n-placeholder="url_per_line"></textarea>
+              </label>
+              <label class="wide local-upload-control">
+                <span data-i18n="local_upload">本地图片（仅 Agnes 图生图）</span>
+                <input id="image-file" type="file" accept="image/*">
+                <span id="local-image-hint" class="field-hint"></span>
+              </label>
+              <div id="local-image-list" class="local-image-list wide"></div>
+              <label class="wide">
+                <span data-i18n="ref_video">参考视频 URL</span>
+                <textarea id="video-urls" rows="2" placeholder="每行一个 URL" data-i18n-placeholder="url_per_line"></textarea>
+              </label>
+              <label class="wide">
+                <span data-i18n="ref_audio">参考音频 URL</span>
+                <textarea id="audio-urls" rows="2" placeholder="每行一个 URL" data-i18n-placeholder="url_per_line"></textarea>
+              </label>
+            </div>
+            <div class="check-row">
+              <label><input id="generate-audio" type="checkbox"> <span data-i18n="generate_audio">生成音频</span></label>
+              <label><input id="watermark" type="checkbox"> <span data-i18n="watermark">水印</span></label>
+            </div>
+          </details>
+
+          <div id="session-bar" class="session-bar" aria-live="polite">
+            <div class="session-summary">
+              <span data-i18n="session_spent">本次会话</span>
+              <strong id="session-spent-value">¥0.00 / ¥10.00</strong>
+            </div>
+            <label class="session-cap-label">
+              <span data-i18n="session_cap">预算上限</span>
+              <input id="session-cap" type="number" min="0" step="0.01">
+            </label>
+            <button id="session-reset" type="button" class="secondary" data-i18n="session_reset">重置</button>
+          </div>
+
+          <div class="actions">
+            <button id="submit-job" type="submit" data-i18n="submit_job">提交任务</button>
+            <button id="refresh-config" type="button" class="secondary" data-i18n="refresh_config">刷新配置</button>
+          </div>
+          <div id="cost-estimate" class="cost-estimate" aria-live="polite">
+            <span data-i18n="cost_estimate">预计花费</span>
+            <strong id="cost-estimate-value">--</strong>
+            <span class="field-hint" data-i18n="cost_note">估算，仅供参考，实际以平台账单为准</span>
+          </div>
+        </form>
+
+        <section class="panel result-panel" aria-labelledby="current-job-heading">
+          <div class="panel-heading">
+            <div>
+              <h2 id="current-job-heading" data-i18n="current_job">当前任务</h2>
+              <p id="current-job-subtitle" data-i18n="no_job">尚未选择任务。</p>
+            </div>
+          </div>
+          <div id="job-detail" class="job-detail empty-state"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="panel-jobs" class="tab-panel" aria-labelledby="tab-jobs">
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2 data-i18n="jobs_heading">我的任务</h2>
+            <p data-i18n="jobs_sub">查看历史任务并打开任意任务详情。</p>
+          </div>
+          <button id="refresh-jobs" type="button" class="secondary" data-i18n="refresh_jobs">刷新任务</button>
+        </div>
+        <div id="jobs-table" class="table-wrap"></div>
+      </section>
+    </section>
+
+    <section id="panel-stitch" class="tab-panel" aria-labelledby="tab-stitch">
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2 data-i18n="stitch_heading">拼接</h2>
+            <p id="stitch-hint" data-i18n="stitch_hint">选择已完成的 mp4 片段，设置顺序，合成一个视频。</p>
+          </div>
+          <button id="refresh-stitch" type="button" class="secondary" data-i18n="refresh_clips">刷新片段</button>
+        </div>
+        <div id="stitch-list" class="stitch-list"></div>
+        <div class="stitch-actions">
+          <label>
+            <span data-i18n="out_name">输出文件名</span>
+            <input id="stitch-out-name" type="text" value="stitched.mp4">
+          </label>
+          <button id="run-stitch" type="button" data-i18n="stitch_run">拼接所选</button>
+        </div>
+        <div id="stitch-result" class="job-detail"></div>
+        <section class="title-card-section" aria-labelledby="stitch-title-card-heading">
+          <div class="section-heading">
+            <h3 id="stitch-title-card-heading" data-i18n="title_card">中文标题</h3>
+            <p id="stitch-title-card-hint" class="muted-text"></p>
+          </div>
+          <form id="stitch-title-card-form" class="title-card-form">
+            <div class="form-grid title-card-grid">
+              <label>
+                <span data-i18n="title_card_title">标题</span>
+                <input id="stitch-title-card-title" type="text" data-title-card-field="title" required>
+              </label>
+              <label>
+                <span data-i18n="title_card_subtitle">副标题（可选）</span>
+                <input id="stitch-title-card-subtitle" type="text" data-title-card-field="subtitle">
+              </label>
+              <label>
+                <span data-i18n="title_card_duration">时长（秒）</span>
+                <input id="stitch-title-card-duration" type="number" min="0.5" step="0.1" value="2.5" data-title-card-field="duration">
+              </label>
+              <label>
+                <span data-i18n="title_card_bg">背景</span>
+                <select id="stitch-title-card-bg" data-title-card-field="bg">
+                  <option value="blur" data-i18n="title_card_bg_blur">模糊首帧</option>
+                  <option value="solid" data-i18n="title_card_bg_solid">纯色</option>
+                </select>
+              </label>
+            </div>
+            <div class="actions">
+              <button id="stitch-title-card-run" type="submit" data-i18n="title_card_run">生成带标题视频</button>
+            </div>
+          </form>
+          <div id="stitch-title-card-result" class="job-detail"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

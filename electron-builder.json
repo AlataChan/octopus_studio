@@ -1,0 +1,90 @@
+{
+  "appId": "com.alata.studio",
+  "productName": "Octopus Studio",
+  "copyright": "Copyright © 2025 Octopus Studio",
+  "directories": {
+    "output": "dist-electron"
+  },
+  "files": [
+	    "electron/**/*",
+	    "frontend/dist/**/*",
+	    "package.json",
+	    "!**/.git/**/*",
+	    "!**/tests/**/*",
+	    "!**/__tests__/**/*",
+	    "!**/storage/**/*",
+	    "!**/*.md",
+	    "!**/*.map",
+	    "!**/LICENSE*",
+	    "!**/CHANGELOG*"
+	  ],
+	  "extraResources": [
+	    {
+	      "from": "server",
+	      "to": "server",
+	      "filter": [
+	        "**/*",
+	        "!**/__tests__/**",
+	        "!**/tests/**",
+	        "!**/coverage/**",
+	        "!**/*.md",
+	        "!**/*.map"
+	      ]
+	    },
+	    {
+	      "from": "collector",
+	      "to": "collector",
+	      "filter": [
+	        "**/*",
+	        "!**/__tests__/**",
+	        "!**/tests/**",
+	        "!**/*.md",
+	        "!**/*.map"
+	      ]
+	    },
+	    {
+	      "from": "frontend/dist",
+	      "to": "frontend/dist",
+	      "filter": [
+	        "**/*"
+	      ]
+	    }
+	  ],
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["arm64"]
+      }
+    ],
+    "category": "public.app-category.productivity",
+    "entitlements": "electron/entitlements.mac.plist",
+    "entitlementsInherit": "electron/entitlements.mac.plist",
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "extendInfo": {
+      "NSMicrophoneUsageDescription": "This app requires microphone access for audio transcription features.",
+      "NSCameraUsageDescription": "This app may require camera access for certain features."
+    }
+  },
+  "dmg": {
+    "title": "Octopus Studio ${version}",
+    "contents": [
+      {
+        "x": 130,
+        "y": 220
+      },
+      {
+        "x": 410,
+        "y": 220,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "publish": null
+}

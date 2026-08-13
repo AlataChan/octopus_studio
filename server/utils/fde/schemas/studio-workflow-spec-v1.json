@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://octopus-studio.local/schemas/studio-workflow-spec-v1.json",
+  "title": "StudioWorkflowSpec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "target",
+    "target_version",
+    "source_ir_version",
+    "source_ir_hash",
+    "workflow",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": { "enum": ["1.0", "1.1"] },
+    "target": { "const": "studio" },
+    "target_version": { "const": "1" },
+    "source_ir_version": { "enum": ["0.3", "0.4"] },
+    "source_ir_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "workflow": { "$ref": "#/$defs/workflow" },
+    "diagnostics": { "$ref": "#/$defs/diagnostics" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "schema_version": { "const": "1.0" } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "workflow": {
+            "type": "object",
+            "properties": {
+              "nodes": {
+                "type": "array",
+                "items": {
+                  "not": {
+                    "type": "object",
+                    "required": ["output_schema"],
+                    "properties": { "output_schema": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "identifier": { "type": "string", "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$" },
+    "typeName": {
+      "enum": [
+        "string", "number", "boolean", "null", "json",
+        "string[]", "number[]", "json[]",
+        "chunks", "file", "any"
+      ]
+    },
+    "port": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identifier" },
+        "type": { "$ref": "#/$defs/typeName" },
+        "required": { "type": "boolean" }
+      }
+    },
+    "triggerNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "mode"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": { "const": "trigger" },
+        "mode": { "const": "manual" }
+      }
+    },
+    "retrievalNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "dataset", "query", "top_k"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": { "const": "retrieval" },
+        "dataset": { "type": "string", "minLength": 1 },
+        "query": { "type": "string", "minLength": 1 },
+        "top_k": { "type": "integer", "minimum": 1, "maximum": 100 }
+      }
+    },
+    "llmNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "model", "prompt"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": { "const": "llm" },
+        "model": { "type": "string", "minLength": 1 },
+        "prompt": { "type": "string", "minLength": 1 },
+        "system_prompt": { "type": "string" },
+        "output_schema": { "type": "object" }
+      }
+    },
+    "outputNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "bindings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "type": { "const": "output" },
+        "bindings": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "$ref": "#/$defs/identifier" },
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "node": {
+      "oneOf": [
+        { "$ref": "#/$defs/triggerNode" },
+        { "$ref": "#/$defs/retrievalNode" },
+        { "$ref": "#/$defs/llmNode" },
+        { "$ref": "#/$defs/outputNode" }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "to"],
+      "properties": {
+        "from": { "$ref": "#/$defs/identifier" },
+        "to": { "$ref": "#/$defs/identifier" }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "handle", "required"],
+      "properties": {
+        "kind": { "enum": ["model", "dataset"] },
+        "handle": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "description",
+        "inputs",
+        "outputs",
+        "nodes",
+        "edges",
+        "required_bindings"
+      ],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "inputs": { "type": "array", "items": { "$ref": "#/$defs/port" } },
+        "outputs": { "type": "array", "items": { "$ref": "#/$defs/port" } },
+        "nodes": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/node" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } },
+        "required_bindings": { "type": "array", "items": { "$ref": "#/$defs/binding" } }
+      }
+    },
+    "diagnostic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "node_id"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "node_id": { "type": ["string", "null"] }
+      }
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["warnings", "unsupported_features"],
+      "properties": {
+        "warnings": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+        "unsupported_features": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } }
+      }
+    }
+  }
+}

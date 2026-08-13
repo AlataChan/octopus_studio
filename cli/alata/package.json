@@ -1,0 +1,11 @@
+{
+  "name": "alata-cli",
+  "version": "0.1.0",
+  "private": true,
+  "bin": {
+    "alata": "./bin/alata.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "name": "alata-studio",
+  "version": "1.9.0",
+  "description": "Octopus Studio - an enterprise AI workbench & agent server (derivative of AnythingLLM, MIT-licensed).",
+  "main": "electron/main/index.cjs",
+  "author": "Mintplex Labs Inc. (upstream AnythingLLM) & Octopus Studio maintainers",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "server",
+    "frontend",
+    "collector",
+    "embed",
+    "browser-extension",
+    "alata-im-gateway",
+    "cli/alata"
+  ],
+  "resolutions": {
+    "express-rate-limit": "8.2.1"
+  },
+  "scripts": {
+    "test": "jest",
+    "cli:alata": "node cli/alata/bin/alata.js",
+    "lint": "cd server && yarn lint && cd ../frontend && yarn lint && cd ../collector && yarn lint",
+    "todos:check": "node scripts/check-todo-allowlist.js",
+    "postinstall": "yarn prisma:generate",
+    "setup": "yarn setup:envs && yarn prisma:setup && echo \"Run yarn dev:all to start server, frontend, and collector.\"",
+    "setup:envs": "cp -n ./frontend/.env.example ./frontend/.env && cp -n ./server/.env.example ./server/.env.development && cp -n ./collector/.env.example ./collector/.env && cp -n ./docker/.env.example ./docker/.env && echo \"All ENV files copied!\n\"",
+    "dev:server": "cd server && yarn dev",
+    "dev:collector": "cd collector && yarn dev",
+    "dev:frontend": "cd frontend && yarn dev",
+    "dev:gateway": "cd alata-im-gateway && node --watch bin/alata-gateway.js run",
+    "dev:all": "npx concurrently \"yarn dev:server\" \"yarn dev:frontend\" \"yarn dev:collector\"",
+    "dev:all:full": "npx concurrently \"yarn dev:server\" \"yarn dev:frontend\" \"yarn dev:collector\" \"yarn dev:paddleocr\" \"yarn dev:visual\"",
+    "dev:paddleocr": "cd services/paddleocr-service && ./start.sh --auto",
+    "dev:visual": "cd services/visual-production && ./start.sh --auto",
+    "build:embed": "cd embed && yarn build",
+    "build:extension": "cd browser-extension && yarn build",
+    "test:gateway": "cd alata-im-gateway && jest --runInBand",
+    "test:cli": "cd cli/alata && node --test test/*.test.js",
+    "prisma:generate": "cd server && npx prisma generate",
+    "prisma:migrate": "cd server && npx prisma migrate dev --name init",
+    "prisma:seed": "cd server && npx prisma db seed",
+    "prisma:setup": "yarn prisma:generate && yarn prisma:migrate && yarn prisma:seed",
+    "prisma:reset": "truncate -s 0 server/storage/anythingllm.db && yarn prisma:migrate",
+    "prod:server": "cd server && yarn start",
+    "prod:frontend": "cd frontend && cross-env VITE_API_BASE=/api yarn build",
+    "generate:cloudformation": "node cloud-deployments/aws/cloudformation/generate.mjs",
+    "generate::gcp_deployment": "node cloud-deployments/gcp/deployment/generate.mjs",
+    "verify:translations": "cd frontend/src/locales && node verifyTranslations.mjs",
+    "normalize:translations": "cd frontend/src/locales && node normalizeEn.mjs && cd ../../.. && yarn lint && yarn verify:translations",
+    "electron:dev": "cross-env NODE_ENV=development electron .",
+    "electron:brand-icon": "node scripts/electron/brand-icon.mjs",
+    "electron:stage:arm64": "node scripts/electron/stage-sidecars.mjs --arch=arm64 --outDir=.electron-build/sidecars",
+    "electron:stage:x64": "node scripts/electron/stage-sidecars.mjs --arch=x64 --outDir=.electron-build/sidecars",
+    "electron:build:arm64": "yarn prod:frontend && yarn electron:stage:arm64 && cross-env NODE_ENV=production electron-builder --mac --arm64 --config electron-builder.config.cjs",
+    "electron:build:arm64:unsigned": "yarn prod:frontend && yarn electron:stage:arm64 && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false NODE_ENV=production electron-builder --mac --arm64 --config electron-builder.config.cjs",
+    "electron:build:arm64:signed-local": "yarn prod:frontend && yarn electron:stage:arm64 && cross-env ALATA_MAC_CODESIGN_DISABLE_TIMESTAMP=true NODE_ENV=production electron-builder --mac --arm64 --config electron-builder.config.cjs",
+    "electron:build:x64": "yarn prod:frontend && yarn electron:stage:x64 && cross-env NODE_ENV=production electron-builder --mac --x64 --config electron-builder.config.cjs",
+    "electron:build:x64:unsigned": "yarn prod:frontend && yarn electron:stage:x64 && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false NODE_ENV=production electron-builder --mac --x64 --config electron-builder.config.cjs",
+    "electron:build": "yarn electron:build:arm64",
+    "electron:build:unsigned": "yarn electron:build:arm64:unsigned",
+    "electron:build:all": "yarn electron:build:arm64 && yarn electron:build:x64",
+    "electron:verify": "node scripts/electron/verify-bundle.mjs",
+    "test:collector": "jest --config collector/jest.config.js --rootDir .",
+    "test:collector:ocr": "jest --config collector/jest.config.js --rootDir . --testPathPattern=OCRLoader"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^41.7.2",
+    "electron-builder": "24.13.3",
+    "jest": "^29.7.0",
+    "playwright": "^1.56.1"
+  },
+  "dependencies": {
+    "color": "^5.0.3",
+    "node-cache": "^5.1.2",
+    "semver": "^7.6.3",
+    "winston": "^3.13.0"
+  },
+  "packageManager": "yarn@4.5.0+sha512.837566d24eec14ec0f5f1411adb544e892b3454255e61fdef8fd05f3429480102806bac7446bc9daff3896b01ae4b62d00096c7e989f1596f2af10b927532f39",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlataChan/octopus_studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlataChan/octopus_studio/issues"
+  },
+  "homepage": "https://github.com/AlataChan/octopus_studio#readme"
+}

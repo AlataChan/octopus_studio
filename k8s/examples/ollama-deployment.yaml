@@ -1,0 +1,184 @@
+# Ollama Deployment
+# 用途：部署 Ollama 本地 LLM 服务
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+  namespace: alata-studio
+  labels:
+    app: ollama
+    component: llm
+spec:
+  replicas: 1  # Ollama 通常单实例运行
+  
+  selector:
+    matchLabels:
+      app: ollama
+      component: llm
+  
+  template:
+    metadata:
+      labels:
+        app: ollama
+        component: llm
+    
+    spec:
+      containers:
+      - name: ollama
+        image: ollama/ollama:latest
+        imagePullPolicy: Always
+        
+        ports:
+        - name: api
+          containerPort: 11434
+          protocol: TCP
+        
+        # 环境变量配置
+        envFrom:
+        - configMapRef:
+            name: ollama-config
+        
+        # 存储卷挂载
+        volumeMounts:
+        - name: ollama-data
+          mountPath: /root/.ollama
+        
+        # 资源限制
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1000m"
+          limits:
+            memory: "16Gi"
+            cpu: "4000m"
+          # GPU 资源（如果有 NVIDIA GPU，取消注释）
+          # limits:
+          #   nvidia.com/gpu: 1
+        
+        # 健康检查
+        livenessProbe:
+          httpGet:
+            path: /api/tags
+            port: 11434
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /api/tags
+            port: 11434
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+      
+      # 存储卷定义
+      volumes:
+      - name: ollama-data
+        persistentVolumeClaim:
+          claimName: ollama-data-pvc
+      
+      # GPU 节点选择器（如果有 GPU 节点，取消注释）
+      # nodeSelector:
+      #   nvidia.com/gpu: "true"
+      
+      # GPU 容忍度（如果 GPU 节点有污点，取消注释）
+      # tolerations:
+      # - key: nvidia.com/gpu
+      #   operator: Exists
+      #   effect: NoSchedule
+      
+      restartPolicy: Always
+
+---
+# 可选：GPU 支持配置
+# 如果集群有 NVIDIA GPU，取消注释以下配置
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: ollama-gpu
+#   namespace: alata-studio
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: ollama
+#       component: llm-gpu
+#   template:
+#     metadata:
+#       labels:
+#         app: ollama
+#         component: llm-gpu
+#     spec:
+#       containers:
+#       - name: ollama
+#         image: ollama/ollama:latest
+#         resources:
+#           limits:
+#             nvidia.com/gpu: 1  # 使用 1 块 GPU
+#         volumeMounts:
+#         - name: ollama-data
+#           mountPath: /root/.ollama
+#       volumes:
+#       - name: ollama-data
+#         persistentVolumeClaim:
+#           claimName: ollama-data-pvc
+#       nodeSelector:
+#         nvidia.com/gpu: "true"
+
+---
+# 使用说明：
+# 
+# 1. 应用配置：
+#    kubectl apply -f ollama-deployment.yaml
+# 
+# 2. 查看状态：
+#    kubectl get pods -n alata-studio -l app=ollama
+#    kubectl logs -f <ollama-pod> -n alata-studio
+# 
+# 3. 下载模型：
+#    kubectl exec -it <ollama-pod> -n alata-studio -- ollama pull qwen2.5:7b
+#    kubectl exec -it <ollama-pod> -n alata-studio -- ollama pull nomic-embed-text:latest
+# 
+# 4. 查看已下载的模型：
+#    kubectl exec -it <ollama-pod> -n alata-studio -- ollama list
+# 
+# 5. 测试 Ollama API：
+#    kubectl exec -it <ollama-pod> -n alata-studio -- curl http://localhost:11434/api/tags
+# 
+# GPU 支持：
+# 
+# 1. 安装 NVIDIA GPU Operator（如果未安装）：
+#    kubectl apply -f https://raw.githubusercontent.com/NVIDIA/gpu-operator/master/deployments/gpu-operator/values.yaml
+# 
+# 2. 验证 GPU 可用性：
+#    kubectl get nodes -o json | jq '.items[].status.capacity'
+#    # 应该看到 "nvidia.com/gpu": "1"
+# 
+# 3. 在 Deployment 中启用 GPU：
+#    取消注释 resources.limits.nvidia.com/gpu
+#    取消注释 nodeSelector 和 tolerations
+# 
+# 4. 验证 GPU 使用：
+#    kubectl exec -it <ollama-pod> -n alata-studio -- nvidia-smi
+# 
+# 资源配置建议：
+# 
+# CPU 模式：
+# - requests: 1 CPU, 4Gi 内存
+# - limits: 4 CPU, 16Gi 内存
+# 
+# GPU 模式：
+# - requests: 2 CPU, 8Gi 内存
+# - limits: 4 CPU, 32Gi 内存, 1 GPU
+# 
+# 注意事项：
+# - Ollama 模型较大，确保 PVC 有足够空间（50Gi+）
+# - 首次启动需要下载模型，可能需要 10-30 分钟
+# - GPU 模式性能更好，但需要 NVIDIA GPU 和 GPU Operator
+# - 生产环境建议使用 GPU 加速
+

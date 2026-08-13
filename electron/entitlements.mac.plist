@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Required by Electron/Chromium V8 in hardened runtime builds. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+
+  <!-- Required while sidecar native .node modules are not Team-ID signed. electron-builder.config.cjs signIgnore skips server/collector/gateway/frontend resource files; remove only after signing native sidecar modules and verifying launch. -->
+  <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+  <true/>
+
+  <!-- Required while sidecar native .node modules are outside Apple's library validation chain. signIgnore currently skips sidecar resource signing; remove only after sidecar native modules are Team-ID signed and verified. -->
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+
+  <!-- Required for outbound provider/API traffic from the desktop runtime. -->
+  <key>com.apple.security.network.client</key>
+  <true/>
+  <!-- Required because the desktop app starts loopback HTTP/WS sidecars for the renderer. Scope is enforced in runtime bind/CSP policy, not in entitlements. -->
+  <key>com.apple.security.network.server</key>
+  <true/>
+
+  <!-- Required for user-selected import/export paths. Prefer app-container storage for automatic runtime data. -->
+  <key>com.apple.security.files.user-selected.read-write</key>
+  <true/>
+
+</dict>
+</plist>

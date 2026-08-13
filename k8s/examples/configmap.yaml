@@ -1,0 +1,154 @@
+# Alata Studio ConfigMap
+# 用途：集中管理配置参数
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alata-config
+  namespace: alata-studio
+  labels:
+    app: alata-studio
+data:
+  # 存储配置
+  STORAGE_DIR: "/app/server/storage"
+  
+  # LLM 配置
+  LLM_PROVIDER: "ollama"
+  OLLAMA_BASE_PATH: "http://ollama-service:11434"
+  OLLAMA_MODEL_PREF: "qwen2.5:7b"
+  OLLAMA_MODEL_TOKEN_LIMIT: "8192"
+  
+  # Embedding 配置
+  EMBEDDING_ENGINE: "ollama"
+  EMBEDDING_BASE_PATH: "http://ollama-service:11434"
+  EMBEDDING_MODEL_PREF: "nomic-embed-text:latest"
+  
+  # 向量数据库配置
+  VECTOR_DB: "lancedb"
+  
+  # 性能配置
+  LOCAL_LLM_CONCURRENT_REQUESTS: "2"
+  LOCAL_LLM_MAX_TOKENS: "4096"
+  
+  # 日志配置
+  LOG_LEVEL: "info"
+  
+  # 可选：多用户模式
+  # MULTI_USER_MODE: "true"
+
+---
+# Ollama ConfigMap
+# 用途：Ollama 服务配置
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ollama-config
+  namespace: alata-studio
+  labels:
+    app: ollama
+data:
+  # 并发配置
+  OLLAMA_NUM_PARALLEL: "2"
+  OLLAMA_MAX_LOADED_MODELS: "1"
+  
+  # 性能配置
+  OLLAMA_NUM_CTX: "4096"
+  OLLAMA_KEEP_ALIVE: "5m"
+  
+  # 网络配置
+  OLLAMA_HOST: "0.0.0.0:11434"
+
+---
+# 可选：Secret（敏感配置）
+# 取消注释以启用
+
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: alata-secrets
+#   namespace: alata-studio
+# type: Opaque
+# stringData:
+#   # 认证令牌
+#   AUTH_TOKEN: "your-secret-token"
+#   JWT_SECRET: "your-jwt-secret"
+#   
+#   # 数据库密码（如使用外部数据库）
+#   # DB_PASSWORD: "your-db-password"
+#   
+#   # API 密钥（如使用云 LLM）
+#   # OPENAI_API_KEY: "sk-..."
+#   # ANTHROPIC_API_KEY: "sk-ant-..."
+
+---
+# 使用说明：
+# 
+# 1. 应用配置：
+#    kubectl apply -f configmap.yaml
+# 
+# 2. 查看 ConfigMap：
+#    kubectl get configmap -n alata-studio
+#    kubectl describe configmap alata-config -n alata-studio
+# 
+# 3. 在 Deployment 中使用 ConfigMap：
+#    
+#    方式 1: 作为环境变量
+#    envFrom:
+#    - configMapRef:
+#        name: alata-config
+#    
+#    方式 2: 单个环境变量
+#    env:
+#    - name: LLM_PROVIDER
+#      valueFrom:
+#        configMapKeyRef:
+#          name: alata-config
+#          key: LLM_PROVIDER
+#    
+#    方式 3: 作为文件挂载
+#    volumeMounts:
+#    - name: config
+#      mountPath: /app/config
+#    volumes:
+#    - name: config
+#      configMap:
+#        name: alata-config
+# 
+# 4. 更新 ConfigMap：
+#    kubectl edit configmap alata-config -n alata-studio
+#    # 或
+#    kubectl apply -f configmap.yaml
+#    
+#    # 重启 Pod 以应用新配置
+#    kubectl rollout restart deployment/alata-studio -n alata-studio
+# 
+# 5. 使用 Secret（敏感配置）：
+#    
+#    创建 Secret:
+#    kubectl create secret generic alata-secrets \
+#      --from-literal=AUTH_TOKEN=your-token \
+#      --from-literal=JWT_SECRET=your-secret \
+#      -n alata-studio
+#    
+#    在 Deployment 中使用:
+#    envFrom:
+#    - secretRef:
+#        name: alata-secrets
+# 
+# ConfigMap vs Secret：
+# - ConfigMap: 非敏感配置（LLM 地址、模型名称等）
+# - Secret: 敏感配置（密码、API Key、Token 等）
+# 
+# 注意事项：
+# - ConfigMap 更新后需要重启 Pod 才能生效
+# - Secret 数据会被 base64 编码（不是加密）
+# - 生产环境建议使用外部密钥管理系统（如 Vault）
+# - 不要在 Git 中提交包含敏感信息的 Secret
+# 
+# 最佳实践：
+# - 使用 ConfigMap 管理所有非敏感配置
+# - 使用 Secret 管理所有敏感配置
+# - 为不同环境（dev/staging/prod）创建不同的 ConfigMap
+# - 使用 Kustomize 或 Helm 管理多环境配置
+

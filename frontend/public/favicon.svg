@@ -1,0 +1,28 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Alata Studio Icon - Favicon version -->
+  <rect width="32" height="32" fill="#1a1a1a" rx="4"/>
+  
+  <!-- Icon: Three interconnected nodes -->
+  <g id="icon">
+    <!-- Connection lines -->
+    <line x1="16" y1="10" x2="11" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="16" y1="10" x2="21" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="11" y1="20" x2="21" y2="20" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    
+    <!-- Top node -->
+    <circle cx="16" cy="10" r="2.5" fill="white"/>
+    <circle cx="16" cy="10" r="1.2" fill="#1a1a1a"/>
+    
+    <!-- Bottom left node -->
+    <circle cx="11" cy="20" r="2.5" fill="white"/>
+    <circle cx="11" cy="20" r="1.2" fill="#1a1a1a"/>
+    
+    <!-- Bottom right node -->
+    <circle cx="21" cy="20" r="2.5" fill="white"/>
+    <circle cx="21" cy="20" r="1.2" fill="#1a1a1a"/>
+    
+    <!-- Center connection point -->
+    <circle cx="16" cy="16" r="1.5" fill="white" opacity="0.6"/>
+  </g>
+</svg>
+

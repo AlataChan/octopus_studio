@@ -1,0 +1,75 @@
+/**
+ * v1.1.0 迁移脚本模板
+ *
+ * 这是一个示例模板，展示如何编写版本迁移脚本
+ * 使用时：
+ * 1. 复制此文件为 v1.1.0.js（去掉 .template 后缀）
+ * 2. 修改 version 和 description
+ * 3. 实现 up() 方法中的迁移逻辑
+ *
+ * 命名规范: v{major}.{minor}.{patch}.js 或 v{major}.{minor}.{patch}_description.js
+ */
+
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+
+module.exports = {
+  version: "1.1.0",
+  description: "示例迁移 - 添加新功能",
+
+  /**
+   * 升级操作
+   * 注意：
+   * - 内置员工同步由 UpgradeManager 自动处理，无需在此处理
+   * - 此处主要处理数据转换、字段迁移等特定操作
+   */
+  async up() {
+    try {
+      // 示例 1: 数据迁移
+      // const records = await prisma.some_table.findMany({
+      //   where: { oldField: { not: null } }
+      // });
+      // for (const record of records) {
+      //   await prisma.some_table.update({
+      //     where: { id: record.id },
+      //     data: { newField: record.oldField }
+      //   });
+      // }
+
+      // 示例 2: 添加系统设置默认值
+      // const { SystemSettings } = require("../../../models/systemSettings");
+      // await SystemSettings.updateSettings({
+      //   new_feature_enabled: "true"
+      // });
+
+      // 示例 3: 清理过时数据
+      // await prisma.old_table.deleteMany({
+      //   where: { deprecated: true }
+      // });
+
+      console.log("      📌 v1.1.0 迁移完成");
+    } catch (error) {
+      console.error("      ❌ v1.1.0 迁移失败:", error.message);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
+    }
+  },
+
+  /**
+   * 回滚操作（可选）
+   * 用于在迁移失败时恢复到之前的状态
+   */
+  async down() {
+    try {
+      // 回滚逻辑
+      console.log("      📌 v1.1.0 回滚完成");
+    } catch (error) {
+      console.error("      ❌ v1.1.0 回滚失败:", error.message);
+      throw error;
+    } finally {
+      await prisma.$disconnect();
+    }
+  },
+};
+

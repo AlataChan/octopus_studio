@@ -1,0 +1,47 @@
+{
+  "canvas": { "width": 1320, "height": 860 },
+  "corridor": { "width": 28, "orientation": "cross" },
+  "zones": [
+    {
+      "id": "zone-default",
+      "type": "workspace",
+      "label": "Default Workspace",
+      "gridSize": [5, 3],
+      "position": { "x": 20, "y": 60 },
+      "size": { "w": 640, "h": 360 },
+      "workspaceSlug": "default"
+    },
+    {
+      "id": "meeting-room",
+      "type": "meeting",
+      "label": "Meeting Room",
+      "capacity": 8,
+      "position": { "x": 900, "y": 60 },
+      "size": { "w": 320, "h": 240 }
+    },
+    {
+      "id": "hot-desk",
+      "type": "hotdesk",
+      "label": "Hot Desk",
+      "gridSize": [5, 2],
+      "position": { "x": 20, "y": 500 },
+      "size": { "w": 560, "h": 220 }
+    },
+    {
+      "id": "lounge",
+      "type": "lounge",
+      "label": "Lounge",
+      "capacity": 6,
+      "position": { "x": 900, "y": 420 },
+      "size": { "w": 320, "h": 300 }
+    }
+  ],
+  "furniture": [
+    { "type": "plant", "position": { "x": 720, "y": 180 } },
+    { "type": "plant", "position": { "x": 760, "y": 540 } },
+    { "type": "coffee-machine", "position": { "x": 700, "y": 420 } }
+  ],
+  "features": {
+    "office3DEnabled": true
+  }
+}

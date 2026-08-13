@@ -1,0 +1,21 @@
+{
+  "applied_at": "2026-04-01T00:00:00Z",
+  "applied_pages": [
+    "wiki/concepts/RAG Operations.md"
+  ],
+  "created": [
+    "wiki/concepts/RAG Operations.md"
+  ],
+  "created_at": "2026-04-01T00:00:00Z",
+  "modified": [],
+  "override": null,
+  "proposal_id": "p-drift-001",
+  "source": {
+    "kind": "raw_file",
+    "path": "raw/rag-ops-source.md",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "staging_path": ".octopus-kb/staging/p-drift-001",
+  "status": "applied",
+  "vault_sha_after": "1111111111111111111111111111111111111111111111111111111111111111"
+}

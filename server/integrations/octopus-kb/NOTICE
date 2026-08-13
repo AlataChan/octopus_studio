@@ -1,0 +1,11 @@
+octopus-kb embedded runtime
+Copyright (c) 2026 Apple
+
+This directory includes code, tests, schemas, prompts, skills, and documentation
+derived from the standalone octopus-kb repository at commit
+d4852698caedbb37f4c370bc339da22a38db1367. That baseline is distributed under
+the MIT License preserved in this directory as LICENSE.
+
+Studio-specific integration and divergence commits are Copyright (c) 2026
+AlataChan and are distributed under the same MIT License. Per-file origin is
+recorded in docs/consolidation/octopus-kb-provenance.json.

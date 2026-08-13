@@ -1,0 +1,46 @@
+{
+  "rules": {
+    "web search": ["web-search"],
+    "search the web": ["web-search"],
+    "web scraping": ["web-scraping"],
+    "web browsing": ["web-browsing"],
+    "read file": ["read-document-file"],
+    "read documents": ["read-document-file"],
+    "knowledge base": ["rag-memory"],
+    "rag": ["rag-memory"],
+    "knowledge graph": ["knowledge-graph"],
+    "sql": ["sql-agent"],
+    "database query": ["sql-agent"],
+    "datetime": ["datetime-info"],
+    "current time": ["datetime-info"],
+    "memory": ["memory"],
+    "save to memory": ["memory"]
+  },
+  "dangerousKeywords": [
+    "code execution",
+    "run code",
+    "execute code",
+    "shell command",
+    "bash",
+    "terminal",
+    "file write",
+    "write file",
+    "create file",
+    "delete",
+    "remove",
+    "destroy",
+    "deploy",
+    "publish",
+    "push",
+    "email send",
+    "message send"
+  ],
+  "autoApprovedAllowlist": [
+    "web-search",
+    "rag-memory",
+    "knowledge-graph",
+    "datetime-info",
+    "read-document-file",
+    "memory"
+  ]
+}

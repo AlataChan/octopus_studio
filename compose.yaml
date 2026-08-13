@@ -1,0 +1,14 @@
+# Default local Docker entrypoint for this repository.
+#
+# The canonical Lite service definitions live in docker/docker-compose.lite.yml.
+# Keeping this file thin lets `docker compose ...` work from the repository root
+# without duplicating the multi-service configuration.
+#
+# Quick start:
+#   cp docker/.env.alata.example docker/.env
+#   docker compose up -d --build
+
+name: alata-studio-lite
+
+include:
+  - path: ./docker/docker-compose.lite.yml

@@ -1,0 +1,16 @@
+Octopus Studio
+Copyright (c) 2026 AlataChan
+
+This product includes software developed by Mintplex Labs Inc. as
+AnythingLLM (https://github.com/Mintplex-Labs/anything-llm), licensed
+under the MIT License. The original LICENSE is preserved in this
+repository at LICENSE.
+
+Modifications and additional code beyond the upstream AnythingLLM
+project are Copyright (c) 2026 AlataChan and are also distributed
+under the MIT License.
+
+The collector optionally includes @firecrawl/anydoc
+(https://github.com/firecrawl/anydoc), Copyright (c) 2026 Sideguide
+Technologies Inc., licensed under the MIT License. The complete license text
+is packaged at collector/THIRD_PARTY_LICENSES/anydoc-MIT.txt.

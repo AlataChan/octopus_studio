@@ -1,0 +1,177 @@
+{
+  "sample_kind": "captured_from_deterministic_e2e",
+  "source_test": "server/__tests__/utils/fde/ecommerceFaqE2E.test.js",
+  "workflow": {
+    "name": "Cross-border E-commerce Customer FAQ",
+    "schema_version": "1.1",
+    "target_version": "1",
+    "source_ir_hash": "fc758a1945ee314ed3c5fcf7d666f03e6482301411ddf207792c24540fc4ce42"
+  },
+  "draft": {
+    "id": "8007b75e-fb0e-42df-bc3f-c3386e498bc9",
+    "lineage_key": "2036db7d-4179-43d1-84b6-aeb62f7e5245",
+    "revision": 1,
+    "status": "published",
+    "state_version": 4,
+    "spec_digest": "75ca1f4ad260e9b51effe664776ed43aa80cf004f80b6317d07c18c47e15288f",
+    "review_subject_digest": "785651234d534a7396884cbb9055394377f034b921c9a163edc5e51b90282faf",
+    "reviewed_subject_digest": "785651234d534a7396884cbb9055394377f034b921c9a163edc5e51b90282faf",
+    "author_user_id": 12,
+    "reviewer_user_id": 44,
+    "publisher_user_id": 55
+  },
+  "run": {
+    "id": "bf54b426-f62f-4753-8e4a-c39d8246bb57",
+    "workspace_id": 2,
+    "fde_workflow_draft_id": "8007b75e-fb0e-42df-bc3f-c3386e498bc9",
+    "engine": "mastra",
+    "status": "succeeded",
+    "event_seq": 15
+  },
+  "checkpoint": {
+    "status": "completed",
+    "node_cursor": "out",
+    "state_version": 12,
+    "attempt_token_present": true
+  },
+  "artifacts": [
+    {
+      "id": "dd4a1efd-6d97-43d3-b589-e26dbe95626e",
+      "artifact_type": "download_file",
+      "mime_type": "application/json",
+      "size_bytes": 215,
+      "metadata": { "contract": "studio-v1" }
+    }
+  ],
+  "events": [
+    {
+      "seq": 1,
+      "type": "status",
+      "payload": {
+        "engine": "mastra",
+        "fdeDraftId": "8007b75e-fb0e-42df-bc3f-c3386e498bc9",
+        "sourceIrHash": "fc758a1945ee314ed3c5fcf7d666f03e6482301411ddf207792c24540fc4ce42",
+        "phase": "started"
+      }
+    },
+    {
+      "seq": 2,
+      "type": "step",
+      "payload": {
+        "nodeId": "start",
+        "nodeType": "trigger",
+        "phase": "started"
+      }
+    },
+    {
+      "seq": 3,
+      "type": "step",
+      "payload": {
+        "nodeId": "start",
+        "nodeType": "trigger",
+        "outputPreview": "{\"inputs\":{\"customer_question\":\"Can I return an unused item 20 days after delivery?\"}}",
+        "phase": "completed"
+      }
+    },
+    {
+      "seq": 4,
+      "type": "step",
+      "payload": {
+        "nodeId": "knowledge",
+        "nodeType": "retrieval",
+        "phase": "started"
+      }
+    },
+    {
+      "seq": 5,
+      "type": "tool",
+      "payload": {
+        "tool": "retrieval",
+        "docId": "returns-policy-ecommercestudioe2ey3VE5i",
+        "chunkCount": 1,
+        "phase": "result"
+      }
+    },
+    {
+      "seq": 6,
+      "type": "step",
+      "payload": {
+        "nodeId": "knowledge",
+        "nodeType": "retrieval",
+        "outputPreview": "{\"chunks\":[{\"text\":\"Unused items that meet policy conditions may be returned within 30 days of delivery.\",\"score\":1,\"docId\":\"returns-policy\"}],\"text\":\"Unused items that meet policy conditions may be r",
+        "phase": "completed"
+      }
+    },
+    {
+      "seq": 7,
+      "type": "step",
+      "payload": { "nodeId": "answer", "nodeType": "llm", "phase": "started" }
+    },
+    {
+      "seq": 8,
+      "type": "status",
+      "payload": {
+        "engine": "mastra",
+        "fdeDraftId": "8007b75e-fb0e-42df-bc3f-c3386e498bc9",
+        "sourceIrHash": "fc758a1945ee314ed3c5fcf7d666f03e6482301411ddf207792c24540fc4ce42",
+        "phase": "started"
+      }
+    },
+    {
+      "seq": 9,
+      "type": "step",
+      "payload": { "nodeId": "answer", "nodeType": "llm", "phase": "started" }
+    },
+    {
+      "seq": 10,
+      "type": "cost",
+      "payload": {
+        "provider": "deterministic",
+        "model": "ecommerce-demo-model",
+        "totalTokens": 15,
+        "pricingSource": "test-fixture",
+        "phase": "updated"
+      }
+    },
+    {
+      "seq": 11,
+      "type": "step",
+      "payload": {
+        "nodeId": "answer",
+        "nodeType": "llm",
+        "outputPreview": "{\"text\":\"{\\\"answer\\\":\\\"Standard returns are accepted within 30 days when the item meets the workspace policy conditions.\\\",\\\"confidence\\\":\\\"high\\\",\\\"escalate\\\":false}\",\"data\":{\"answer\":\"Standard retur",
+        "phase": "completed"
+      }
+    },
+    {
+      "seq": 12,
+      "type": "step",
+      "payload": { "nodeId": "out", "nodeType": "output", "phase": "started" }
+    },
+    {
+      "seq": 13,
+      "type": "step",
+      "payload": {
+        "nodeId": "out",
+        "nodeType": "output",
+        "outputPreview": "{\"bindings\":{\"response\":{\"answer\":\"Standard returns are accepted within 30 days when the item meets the workspace policy conditions.\",\"confidence\":\"high\",\"escalate\":false}}}",
+        "phase": "completed"
+      }
+    },
+    { "seq": 14, "type": "status", "payload": { "phase": "succeeded" } },
+    {
+      "seq": 15,
+      "type": "artifact",
+      "payload": {
+        "artifactId": "dd4a1efd-6d97-43d3-b589-e26dbe95626e",
+        "artifactType": "download_file",
+        "phase": "created"
+      }
+    }
+  ],
+  "fail_closed_checks": {
+    "missing_binding": "STUDIO_BINDING_MISSING",
+    "unpublished_run": "STUDIO_RUN_PUBLISHED_REQUIRED"
+  },
+  "redaction": "Allowlisted persisted fields from synthetic test rows; no credentials or real customer data."
+}
