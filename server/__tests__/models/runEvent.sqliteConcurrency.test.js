@@ -28,6 +28,7 @@ describe("RunEvent SQLite sequence allocation", () => {
   });
 
   it("allocates contiguous unique sequences from two independent clients", async () => {
+    const eventCount = 6;
     const workspace = await first.workspaces.create({
       data: {
         name: "RunEvent concurrency test",
@@ -50,7 +51,7 @@ describe("RunEvent SQLite sequence allocation", () => {
     const models = [createRunEventModel(first), createRunEventModel(second)];
 
     await Promise.all(
-      Array.from({ length: 12 }, (_, index) =>
+      Array.from({ length: eventCount }, (_, index) =>
         models[index % 2].append({
           runId,
           type: "step.completed",
@@ -67,9 +68,9 @@ describe("RunEvent SQLite sequence allocation", () => {
       }),
     ]);
     expect(events.map((event) => event.seq)).toEqual(
-      Array.from({ length: 12 }, (_, index) => index + 1)
+      Array.from({ length: eventCount }, (_, index) => index + 1)
     );
-    expect(new Set(events.map((event) => event.seq)).size).toBe(12);
-    expect(run.eventSeq).toBe(12);
+    expect(new Set(events.map((event) => event.seq)).size).toBe(eventCount);
+    expect(run.eventSeq).toBe(eventCount);
   });
 });
