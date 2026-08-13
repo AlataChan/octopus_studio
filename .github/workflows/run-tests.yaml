@@ -36,7 +36,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "yarn"
+
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          yarn --version
 
       - name: Check production TODO allowlist
         run: node scripts/check-todo-allowlist.js --strict
